@@ -1,8 +1,9 @@
+import HeroSection from "../../components/Guest/HeroSection";
+
 const HomePage = () => {
     return (
         <div>
-            <h1>Welcome to Creative Arts</h1>
-            <p>Explore our collection.</p>
+           <HeroSection /> 
         </div>
     );
 };
