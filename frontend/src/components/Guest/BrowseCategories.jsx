@@ -53,7 +53,7 @@ const BrowseCategories = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto mt-20 px-4">
+    <div className="max-w-6xl mx-auto mt-20 mb-20 px-4">
       <h2 className="text-3xl font-bold mb-2 text-gray-900">
         Browse Categories
       </h2>
