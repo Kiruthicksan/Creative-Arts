@@ -1,19 +1,18 @@
 import { Star, Download, ShoppingCart, Heart } from "lucide-react";
-import GirlRidingBike from "../../assets/GirlRidingBike.png";
 import { motion } from "framer-motion";
 
 const ProductCard = ({
-  image = GirlRidingBike,
-  title = "Cosmic Dreams UI Kit",
-  author = "Kiruthicksan",
-  description = "A stunning collection of 200+ UI components with a cosmic, space-themed aesthetic.",
-  rating = 4.9,
-  reviews = 187,
-  downloads = 2340,
-  price = 49,
-  originalPrice = 79,
-  discount = 38,
-  featured = true,
+  image ,
+  title ,
+  author ,
+  description ,
+  rating ,
+  reviews ,
+  downloads ,
+  price ,
+  originalPrice ,
+  discount ,
+  featured ,
 }) => {
   return (
     <motion.div
@@ -88,7 +87,7 @@ const ProductCard = ({
           <div className="w-px h-3 bg-gray-300"></div>
           <div className="flex items-center gap-1">
             <Download className="w-3.5 h-3.5 text-gray-400" />
-            <span className="font-medium">{downloads.toLocaleString()}</span>
+            <span className="font-medium">{downloads}</span>
           </div>
         </div>
 
@@ -97,10 +96,10 @@ const ProductCard = ({
           <div className="flex flex-col">
             <span className="text-[10px] text-gray-400 font-medium">Price</span>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xl font-bold text-gray-900">${price}</span>
+              <span className="text-xl font-bold text-gray-900">₹{price}</span>
               {originalPrice && (
                 <span className="text-xs font-medium text-gray-400 line-through decoration-gray-300">
-                  ${originalPrice}
+                  ₹{originalPrice}
                 </span>
               )}
             </div>

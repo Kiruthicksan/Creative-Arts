@@ -1,0 +1,63 @@
+
+import GirlRidingBike from "../assets/GirlRidingBike.png";
+import AnimeGirl from "../assets/AnimeGirlHoldingCup.png"; 
+// You can use placeholder images if you don't have enough assets yet
+
+export const productsData = [
+  {
+    id: 1,
+    image: GirlRidingBike,
+    title: "Cosmic Dreams UI Kit",
+    author: "Kiruthicksan",
+    description: "A stunning collection of 200+ UI components with a cosmic theme.",
+    rating: 4.9,
+    reviews: 187,
+    downloads: 2340,
+    price: 49,
+    originalPrice: 79,
+    discount: 38,
+    featured: true,
+  },
+  {
+    id: 2,
+    image: AnimeGirl,
+    title: "Anime Character Pack",
+    author: "PixelMage",
+    description: "High-resolution fantasy anime characters for your next game project.",
+    rating: 4.8,
+    reviews: 120,
+    downloads: 1560,
+    price: 29,
+    originalPrice: 49,
+    discount: 40,
+    featured: true,
+  },
+  {
+    id: 3,
+    image: GirlRidingBike,
+    title: "Ethereal Textures",
+    author: "Aria Design",
+    description: "Hand-painted watercolor textures perfect for backgrounds.",
+    rating: 5.0,
+    reviews: 45,
+    downloads: 890,
+    price: 35,
+    originalPrice: null,
+    discount: 0,
+    featured: false,
+  },
+  {
+    id: 4,
+    image: AnimeGirl,
+    title: "Abstract 3D Shapes",
+    author: "Luna Studios",
+    description: "Modern 3D abstract shapes for web design and marketing.",
+    rating: 4.7,
+    reviews: 210,
+    downloads: 3400,
+    price: 55,
+    originalPrice: 99,
+    discount: 45,
+    featured: true,
+  },
+];
