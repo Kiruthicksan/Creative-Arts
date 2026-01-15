@@ -19,9 +19,7 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "Invalid username" });
     }
 
-    if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
-      return res.status(400).json({ message: "Invalid password" });
-    }
+   
 
     if (password.length < 8) {
       return res.status(400).json({ message: "Password must be at least 8 characters long" });
@@ -71,9 +69,7 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: "Invalid email" });
         }
 
-        if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
-            return res.status(400).json({ message: "Invalid password" });
-        }
+      
 
         if (password.length < 8) {
             return res.status(400).json({ message: "Password must be at least 8 characters long" });

@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import config from "../utils/secret.js";
 
 export const authMiddleware = (req, res, next) => {
   try {
@@ -6,7 +7,7 @@ export const authMiddleware = (req, res, next) => {
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, config.jwt.secret , (err, user) => {
       if (err) {
         return res.status(403).json({ message: "Token is not valid!" });
       }
