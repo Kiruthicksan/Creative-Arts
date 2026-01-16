@@ -35,6 +35,31 @@ const useAuthStore = create((set) => ({
       });
     }
   },
+
+  profile : async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const response = await API.get("/user/profile");
+      set({ user: response.data.user, isLoading: false });
+    } catch (error) {
+      set({
+        isLoading: false,
+        error: error.response?.data?.message || "Profile fetch failed",
+      });
+    }
+  },
+  logout : async () => {
+    try {
+      set({ isLoading: true, error: null });
+      await API.post("/auth/logout");
+      set({ user: null, isLoading: false });
+    } catch (error) {
+      set({
+        isLoading: false,
+        error: error.response?.data?.message || "Logout failed",
+      });
+    }
+  }
 }));
 
 export default useAuthStore;

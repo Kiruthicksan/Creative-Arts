@@ -26,31 +26,47 @@ const GoogleIcon = () => (
 );
 
 const Login = ({ onSwitchToRegister }) => {
-  // State to control password visibility
+
+  // ----------------------- State to control password visibility --------------------------------
   const [showPassword, setShowPassword] = useState(false);
 
+  // ----------------------- form data state --------------------------------
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const {login, isLoading} = useAuthStore()
+  // ----------------------- auth store --------------------------------
+  const {login, isLoading, error} = useAuthStore()
   const navigate = useNavigate()
 
-  // Ref to focus the email input
+  // ----------------------- Ref to focus the email input --------------------------------
   const inputRef = useRef(null);
 
-  // Auto focus the email input
+  // ----------------------- Auto focus the email input --------------------------------
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
+  // ----------------------- handle form data --------------------------------
   const handleFormData = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // ----------------------- validation --------------------------------
+  const validation = () => {
+    if (!formData.email || !formData.password) {
+      return false;
+    }
+    return true;
+  };
+
+  // ----------------------- handle login --------------------------------
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!validation()) {
+      return;
+    }
     await login(formData.email, formData.password)
     navigate("/")
   };
@@ -81,6 +97,7 @@ const Login = ({ onSwitchToRegister }) => {
               onChange={handleFormData}
               name="email"
             />
+            {error && <p className="text-xs text-red-500">{error}</p>}
           </div>
         </div>
 

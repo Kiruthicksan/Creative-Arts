@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Lock, Mail, User, Eye, EyeOff, Github } from "lucide-react";
+import useAuthStore from "../../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -28,6 +30,18 @@ const Register = ({ onSwitchToLogin }) => {
   // state to control password visibility
   const [showPassword, setShowPassword] = useState(false);
 
+  // ----------------------- auth store --------------------------------
+  const {register, isLoading, error} = useAuthStore()
+
+  const navigate = useNavigate()
+
+  // form state
+  const [formData, setFormData] = useState({
+    userName: "",
+    email: "",
+    password: "",
+  })
+
   // Ref to focus the userName input
   const inputRef = useRef(null)
 
@@ -35,6 +49,22 @@ const Register = ({ onSwitchToLogin }) => {
   useEffect(() => {
     inputRef.current.focus()
   },[])
+
+  // handle input change
+  const handleChange = (e) => {
+    const {name, value} = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  // handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    await register(formData.email, formData.password, formData.userName)
+    navigate("/")
+  }
 
   return (
     <div>
@@ -47,7 +77,7 @@ const Register = ({ onSwitchToLogin }) => {
         </p>
       </div>
 
-      <form className="p-6 space-y-4" onSubmit={(e) => e.preventDefault()}>
+      <form className="p-6 space-y-4" onSubmit={handleSubmit}>
         {/* Full Name Field */}
         <div className="space-y-1">
           <label className="text-xs font-medium text-gray-900">Full Name</label>
@@ -58,6 +88,9 @@ const Register = ({ onSwitchToLogin }) => {
               placeholder="Enter your name"
               className="outline-none border-none text-xs w-full text-gray-700 placeholder:text-gray-400"
               ref={inputRef}
+              name="userName"
+              value={formData.userName}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -71,6 +104,9 @@ const Register = ({ onSwitchToLogin }) => {
               type="email"
               placeholder="Enter your email"
               className="outline-none border-none text-xs w-full text-gray-700 placeholder:text-gray-400"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -84,6 +120,9 @@ const Register = ({ onSwitchToLogin }) => {
               type={showPassword ? "text" : "password"}
               placeholder="Create a password"
               className="outline-none border-none text-xs w-full text-gray-700 placeholder:text-gray-400"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
             />
             <button
               type="button"
@@ -101,7 +140,7 @@ const Register = ({ onSwitchToLogin }) => {
 
         {/* Sign Up Button */}
         <button className="w-full py-2.5 px-4 bg-[#7c3bed] hover:bg-[#6d35d0] text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-purple-600/20 active:scale-[0.98]">
-          Create Account
+          {isLoading ? "Creating Account..." : "Create Account"}
         </button>
 
         {/* Divider */}
