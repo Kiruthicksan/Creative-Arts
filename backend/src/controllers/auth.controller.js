@@ -49,6 +49,7 @@ export const register = async (req, res) => {
       _id: newUser._id,
       userName: newUser.userName,
       email: newUser.email,
+      role: newUser.role
     } });
   } catch (error) {
     console.log(error);
@@ -94,6 +95,7 @@ export const login = async (req, res) => {
           _id: user._id,
           userName: user.userName,
           email: user.email,
+          role: user.role
         } });
     } catch (error) {
         console.log(error);
