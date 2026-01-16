@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Lock, Mail, User, Eye, EyeOff, Github } from "lucide-react";
 
 // Google Icon Component
@@ -24,7 +24,17 @@ const GoogleIcon = () => (
 );
 
 const Register = ({ onSwitchToLogin }) => {
+
+  // state to control password visibility
   const [showPassword, setShowPassword] = useState(false);
+
+  // Ref to focus the userName input
+  const inputRef = useRef(null)
+
+  // Auto focus the userName input
+  useEffect(() => {
+    inputRef.current.focus()
+  },[])
 
   return (
     <div>
@@ -47,6 +57,7 @@ const Register = ({ onSwitchToLogin }) => {
               type="text"
               placeholder="Enter your name"
               className="outline-none border-none text-xs w-full text-gray-700 placeholder:text-gray-400"
+              ref={inputRef}
             />
           </div>
         </div>

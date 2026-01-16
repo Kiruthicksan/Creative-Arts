@@ -8,6 +8,18 @@ const ModalContainer = ({ children, setIsAuthModalOpen }) => {
             document.body.style.overflow = "auto";
         };
     }, []);
+
+    const escapeClose = (e) => {
+      if (e.key === "Escape"){
+        setIsAuthModalOpen(false)
+      }
+    }
+    useEffect(() => {
+      document.addEventListener("keydown", escapeClose);
+      return () => {
+        document.removeEventListener("keydown", escapeClose);
+      };
+    }, []);
   return (
     <div className="fixed inset-0  flex items-center justify-center z-50 min-h-screen bg-black/70">
       <div className="bg-white rounded-2xl w-[400px] relative overflow-hidden w-[450px]">

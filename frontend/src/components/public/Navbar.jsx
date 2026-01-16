@@ -7,23 +7,23 @@ import Login from "../Guest/Login";
 
 
 const Navbar = () => {
+  // local state for managing auth modal
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalView, setAuthModalView] = useState("login");
 
-    // local state for managing auth modal
-    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-    const [authModalView, setAuthModalView] = useState("login")
+  // local state for managing mobile menu
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // local state for managing mobile menu
-    const  [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-    // function to open auth modal
-    const openModal = () => {
-        setAuthModalView('login')
-        setIsAuthModalOpen(true)
-    }
-
+  // function to open auth modal
+  const openModal = () => {
+    setAuthModalView("login");
+    setIsAuthModalOpen(true);
+  };
 
   return (
-    <div className="h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+    <div
+      className={`bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 h-16`}
+    >
       <nav className="h-full flex justify-between items-center px-4 lg:px-8 max-w-7xl mx-auto">
         {/* Left Side: Logo & Navigation */}
         <div className="flex items-center gap-10">
@@ -90,37 +90,34 @@ const Navbar = () => {
 
           {/* Auth Buttons */}
           <div className="flex items-center gap-2 lg:gap-4">
-            <button className="hidden md:block px-4 py-2 text-sm font-semibold text-gray-600 bg-[#7c3bed] hover:bg-[#7c3bed]/80   text-white transition-colors rounded-lg border-none" onClick={openModal}>
+            <button
+              className="hidden md:block px-4 py-2 text-sm font-semibold text-gray-600 bg-[#7c3bed] hover:bg-[#7c3bed]/80   text-white transition-colors rounded-lg border-none outline-none"
+              onClick={openModal}
+            >
               Sign In
             </button>
 
-
             {isAuthModalOpen && (
-                 <ModalContainer setIsAuthModalOpen={setIsAuthModalOpen} >
-                    {authModalView === "login" ? <Login  onSwitchToRegister={() => setAuthModalView("register")} /> : <Register onSwitchToLogin={() => setAuthModalView("login")} />}
-                 </ModalContainer>
+              <ModalContainer setIsAuthModalOpen={setIsAuthModalOpen}>
+                {authModalView === "login" ? (
+                  <Login
+                    onSwitchToRegister={() => setAuthModalView("register")}
+                  />
+                ) : (
+                  <Register onSwitchToLogin={() => setAuthModalView("login")} />
+                )}
+              </ModalContainer>
             )}
 
             {/* Mobile Menu Toggle */}
-            <button className="lg:hidden p-1 text-gray-600 hover:bg-gray-100 rounded-lg" onClick={() => setIsMobileMenuOpen(true)}>
+            <button
+              className="lg:hidden p-1 text-gray-600 hover:bg-gray-100 rounded-lg"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
               <Menu className="w-6 h-6" />
             </button>
 
-            {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-                    <div className="bg-white rounded-2xl w-[400px] relative overflow-hidden w-[450px]">
-                        <div>
-                            <button
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="absolute top-4 right-4"
-                            >
-                                <X className="w-6 h-6" />
-                            </button>
-                            
-                        </div>
-                    </div>
-                </div>
-            )}
+
           </div>
         </div>
       </nav>

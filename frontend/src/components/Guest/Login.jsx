@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Lock, Mail, Eye, EyeOff, Github } from "lucide-react";
+import useAuthStore from "../../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 // Google Icon Component (not my own. Found it on the internet)
 const GoogleIcon = () => (
@@ -23,12 +25,35 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const Login = ({onSwitchToRegister}) => {
-
+const Login = ({ onSwitchToRegister }) => {
+  // State to control password visibility
   const [showPassword, setShowPassword] = useState(false);
 
- 
-  
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const {login, isLoading} = useAuthStore()
+  const navigate = useNavigate()
+
+  // Ref to focus the email input
+  const inputRef = useRef(null);
+
+  // Auto focus the email input
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  const handleFormData = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    await login(formData.email, formData.password)
+    navigate("/")
+  };
 
   return (
     <div>
@@ -41,7 +66,7 @@ const Login = ({onSwitchToRegister}) => {
         </p>
       </div>
 
-      <form className="p-6 space-y-4" onSubmit={(e) => e.preventDefault()}>
+      <form className="p-6 space-y-4" onSubmit={handleLogin}>
         {/* Email Field */}
         <div className="space-y-1">
           <label className="text-xs font-medium text-gray-900">Email</label>
@@ -51,6 +76,10 @@ const Login = ({onSwitchToRegister}) => {
               type="email"
               placeholder="Enter your email"
               className="outline-none border-none text-xs w-full text-gray-700 placeholder:text-gray-400"
+              ref={inputRef}
+              value={formData.email}
+              onChange={handleFormData}
+              name="email"
             />
           </div>
         </div>
@@ -64,6 +93,9 @@ const Login = ({onSwitchToRegister}) => {
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               className="outline-none border-none text-xs w-full text-gray-700 placeholder:text-gray-400"
+              value={formData.password}
+              onChange={handleFormData}
+              name="password"
             />
             <button
               type="button"
@@ -100,7 +132,7 @@ const Login = ({onSwitchToRegister}) => {
 
         {/* Sign In Button */}
         <button className="w-full py-2.5 px-4 bg-[#7c3bed] hover:bg-[#6d35d0] text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-purple-600/20 active:scale-[0.98]">
-          Sign In
+          {isLoading ? "Signing In..." : "Sign In"}
         </button>
 
         {/* Divider */}
