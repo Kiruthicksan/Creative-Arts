@@ -3,7 +3,7 @@ import API from "../services/api";
 
 const useAuthStore = create((set) => ({
   user: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
   isAuthenticated: false,
 
@@ -16,6 +16,7 @@ const useAuthStore = create((set) => ({
         isLoading: false,
         isAuthenticated: true,
       });
+      return response;
     } catch (error) {
       set({
         isLoading: false,
@@ -38,6 +39,7 @@ const useAuthStore = create((set) => ({
         isLoading: false,
         isAuthenticated: true,
       });
+      return response;
     } catch (error) {
       set({
         isLoading: false,

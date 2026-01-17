@@ -26,45 +26,55 @@ const GoogleIcon = () => (
 );
 
 const Register = ({ onSwitchToLogin }) => {
-
   // state to control password visibility
   const [showPassword, setShowPassword] = useState(false);
 
   // ----------------------- auth store --------------------------------
-  const {register, isLoading, error} = useAuthStore()
+  const { register, isLoading, error } = useAuthStore();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // form state
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
     password: "",
-  })
+  });
 
   // Ref to focus the userName input
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
 
   // Auto focus the userName input
   useEffect(() => {
-    inputRef.current.focus()
-  },[])
+    inputRef.current.focus();
+  }, []);
 
   // handle input change
   const handleChange = (e) => {
-    const {name, value} = e.target
-    setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   // handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    await register(formData.email, formData.password, formData.userName)
-    navigate("/")
-  }
+    e.preventDefault();
+    const response = await register(
+      formData.email,
+      formData.password,
+      formData.userName
+    );
+    if (response) {
+      const role = response.data.user.role;
+      if (role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/customer-dashboard");
+      }
+    }
+  };
 
   return (
     <div>
@@ -72,9 +82,7 @@ const Register = ({ onSwitchToLogin }) => {
         <h1 className="text-2xl font-serif font-bold text-gray-900 mb-1.5">
           Create account
         </h1>
-        <p className="text-xs text-gray-500">
-          Join thousands of  customers
-        </p>
+        <p className="text-xs text-gray-500">Join thousands of customers</p>
       </div>
 
       <form className="p-6 space-y-4" onSubmit={handleSubmit}>

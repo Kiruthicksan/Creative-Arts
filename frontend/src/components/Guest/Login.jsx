@@ -26,7 +26,6 @@ const GoogleIcon = () => (
 );
 
 const Login = ({ onSwitchToRegister }) => {
-
   // ----------------------- State to control password visibility --------------------------------
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,8 +36,8 @@ const Login = ({ onSwitchToRegister }) => {
   });
 
   // ----------------------- auth store --------------------------------
-  const {login, isLoading, error} = useAuthStore()
-  const navigate = useNavigate()
+  const { login, isLoading, error } = useAuthStore();
+  const navigate = useNavigate();
 
   // ----------------------- Ref to focus the email input --------------------------------
   const inputRef = useRef(null);
@@ -67,8 +66,15 @@ const Login = ({ onSwitchToRegister }) => {
     if (!validation()) {
       return;
     }
-    await login(formData.email, formData.password)
-    navigate("/")
+    const response = await login(formData.email, formData.password);
+    if (response) {
+      const role = response.data.user.role;
+      if (role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/customer-dashboard");
+      }
+    }
   };
 
   return (
@@ -97,7 +103,6 @@ const Login = ({ onSwitchToRegister }) => {
               onChange={handleFormData}
               name="email"
             />
-            {error && <p className="text-xs text-red-500">{error}</p>}
           </div>
         </div>
 

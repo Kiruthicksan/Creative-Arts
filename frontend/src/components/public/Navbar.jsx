@@ -4,7 +4,7 @@ import { useState } from "react";
 import ModalContainer from "../Guest/ModalContainer";
 import Register from "../Guest/Register";
 import Login from "../Guest/Login";
-
+import useAuthStore from "../../store/useAuthStore";
 
 const Navbar = () => {
   // local state for managing auth modal
@@ -13,6 +13,8 @@ const Navbar = () => {
 
   // local state for managing mobile menu
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { user, logout } = useAuthStore();
 
   // function to open auth modal
   const openModal = () => {
@@ -90,12 +92,21 @@ const Navbar = () => {
 
           {/* Auth Buttons */}
           <div className="flex items-center gap-2 lg:gap-4">
-            <button
-              className="hidden md:block px-4 py-2 text-sm font-semibold text-gray-600 bg-[#7c3bed] hover:bg-[#7c3bed]/80   text-white transition-colors rounded-lg border-none outline-none"
-              onClick={openModal}
-            >
-              Sign In
-            </button>
+            {user ? (
+              <button
+                className="hidden md:block px-4 py-2 text-sm font-semibold text-gray-600 bg-[#7c3bed] hover:bg-[#7c3bed]/80 text-white transition-colors rounded-lg border-none outline-none"
+                onClick={logout}
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                className="hidden md:block px-4 py-2 text-sm font-semibold text-gray-600 bg-[#7c3bed] hover:bg-[#7c3bed]/80 text-white transition-colors rounded-lg border-none outline-none"
+                onClick={openModal}
+              >
+                Sign In
+              </button>
+            )}
 
             {isAuthModalOpen && (
               <ModalContainer setIsAuthModalOpen={setIsAuthModalOpen}>
@@ -116,8 +127,6 @@ const Navbar = () => {
             >
               <Menu className="w-6 h-6" />
             </button>
-
-
           </div>
         </div>
       </nav>
