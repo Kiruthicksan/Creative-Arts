@@ -1,7 +1,9 @@
 import { Star, Download, ShoppingCart, Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({
+  id,
   image ,
   title ,
   author ,
@@ -14,11 +16,14 @@ const ProductCard = ({
   discount ,
   featured ,
 }) => {
+
+  const navigate = useNavigate();
   return (
     <motion.div
       whileHover={{ scale: 1.02, y: -5 }}
       transition={{ duration: 0.3 }}
       className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-2xl cursor-pointer overflow-hidden group flex flex-col h-full"
+      onClick={() => navigate(`/product/${id}`)}
     >
       {/* Image Section */}
       <div className="relative h-48 w-full overflow-hidden bg-gray-100">

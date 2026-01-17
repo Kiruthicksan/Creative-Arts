@@ -9,6 +9,7 @@ import LoginPage from "./pages/Guest/LoginPage";
 import { useEffect } from "react";
 import useAuthStore from "./store/useAuthStore";
 import CustomerLayout from "./layouts/CustomerLayout";
+import ProductDetailsPage from "./pages/Guest/ProductDetailsPage";
 
 const App = () => {
   const { user, profile } = useAuthStore();
@@ -26,6 +27,7 @@ const App = () => {
         {/* Guest Routes */}
         <Route element={<GuestLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/product/:id" element={<ProductDetailsPage />} />
         </Route>
 
         {/* Customer Routes */}
