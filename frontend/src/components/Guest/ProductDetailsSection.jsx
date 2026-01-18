@@ -10,8 +10,6 @@ import {
   Share2,
   CheckCircle,
 } from "lucide-react";
-import InfoCard from "./InfoCard";
-import { motion } from "framer-motion";
 import BackButton from "./BackButton";
 import ProductGallery from "./ProductGallery";
 import ProductHearder from "./ProductHearder";

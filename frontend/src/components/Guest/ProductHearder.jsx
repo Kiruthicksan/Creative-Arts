@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { Star,  ShoppingCart, Heart, Share2, CheckCircle } from "lucide-react";
+import { Star } from "lucide-react";
 import InfoGrid from "./InfoGrid";
 import ProductTags from "./ProductTags";
 import ProductPrice from "./ProductPrice";
