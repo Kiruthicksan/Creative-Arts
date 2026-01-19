@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Heart, Search, ShoppingCart, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ModalContainer from "../Guest/ModalContainer";
 import Register from "../Guest/Register";
 import Login from "../Guest/Login";
@@ -10,6 +10,9 @@ const Navbar = () => {
   // local state for managing auth modal
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalView, setAuthModalView] = useState("login");
+
+  const [profileOpen, setProfileOpen] = useState(false);
+  const menuRef = useRef(null);
 
   // local state for managing mobile menu
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,9 +25,21 @@ const Navbar = () => {
     setIsAuthModalOpen(true);
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <div
-      className={`bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 h-16`}
+      className={`bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 h-16 lg:h-20`}
     >
       <nav className="h-full flex justify-between items-center px-4 lg:px-8 max-w-7xl mx-auto">
         {/* Left Side: Logo & Navigation */}
@@ -93,12 +108,33 @@ const Navbar = () => {
           {/* Auth Buttons */}
           <div className="flex items-center gap-2 lg:gap-4">
             {user ? (
-              <button
-                className="hidden md:block px-4 py-2 text-sm font-semibold text-gray-600 bg-[#7c3bed] hover:bg-[#7c3bed]/80 text-white transition-colors rounded-lg border-none outline-none"
-                onClick={logout}
-              >
-                Logout
-              </button>
+              <div className="relative" ref={menuRef}>
+                <button
+                  className="hidden md:flex items-center justify-center w-10 h-10 text-sm font-bold bg-[#7c3bed] hover:bg-[#7c3bed]/80 text-white transition-colors rounded-full border-none outline-none shadow-sm"
+                  onClick={() => setProfileOpen((prev) => !prev)}
+                >
+                  {user.userName.charAt(0).toUpperCase()}
+                </button>
+                {profileOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-2xl border border-gray-100 py-1 z-50">
+                    <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                      Profile
+                    </button>
+                    <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                      My Library
+                    </button>
+                    <button
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                      onClick={() => {
+                        logout();
+                        setProfileOpen(false);
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <button
                 className="hidden md:block px-4 py-2 text-sm font-semibold text-gray-600 bg-[#7c3bed] hover:bg-[#7c3bed]/80 text-white transition-colors rounded-lg border-none outline-none"
