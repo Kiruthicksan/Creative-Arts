@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import useAuthStore from "./store/useAuthStore";
 import CustomerLayout from "./layouts/CustomerLayout";
 import ProductDetailsPage from "./pages/Guest/ProductDetailsPage";
+import BrowsePage from "./pages/Guest/BrowsePage";
 
 const App = () => {
   const { user, profile } = useAuthStore();
@@ -28,6 +29,7 @@ const App = () => {
         <Route element={<GuestLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductDetailsPage />} />
+          <Route path="/browse" element={<BrowsePage />} />
         </Route>
 
         {/* Customer Routes */}

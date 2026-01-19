@@ -23,6 +23,8 @@ export const productsData = [
     originalPrice: 80,
     discount: 44,
     featured: true,
+    category: "Illustrations",
+    fileFormat: "PSD",
   },
   {
     id: 2,
@@ -38,6 +40,8 @@ export const productsData = [
     originalPrice: 50,
     discount: 30,
     featured: true,
+    category: "Illustrations",
+    fileFormat: "PSD",
   },
   {
     id: 3,
@@ -52,6 +56,8 @@ export const productsData = [
     originalPrice: null,
     discount: 0,
     featured: false,
+    category: "Illustrations",
+    fileFormat: "PSD",
   },
   {
     id: 4,
@@ -67,6 +73,8 @@ export const productsData = [
     originalPrice: 99,
     discount: 40,
     featured: true,
+    category: "UI Kits",
+    fileFormat: "PSD",
   },
   {
     id: 5,
@@ -82,6 +90,8 @@ export const productsData = [
     originalPrice: 60,
     discount: 33,
     featured: false,
+    category: "Illustrations",
+    fileFormat: "PSD",
   },
   {
     id: 6,
@@ -97,6 +107,8 @@ export const productsData = [
     originalPrice: 45,
     discount: 33,
     featured: true,
+    category: "Illustrations",
+    fileFormat: "PSD",
   },
   {
     id: 7,
@@ -112,6 +124,8 @@ export const productsData = [
     originalPrice: null,
     discount: 0,
     featured: false,
+    category: "Illustrations",
+    fileFormat: "PSD",
   },
   {
     id: 8,
@@ -127,6 +141,8 @@ export const productsData = [
     originalPrice: 35,
     discount: 37,
     featured: true,
+    category: "Illustrations",
+    fileFormat: "PSD",
   },
   {
     id: 9,
@@ -141,5 +157,7 @@ export const productsData = [
     originalPrice: 40,
     discount: 38,
     featured: false,
+    category: "Illustrations",
+    fileFormat: "PSD",
   },
 ];

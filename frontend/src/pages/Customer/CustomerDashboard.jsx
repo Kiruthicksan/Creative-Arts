@@ -5,7 +5,7 @@ import Header from "../../components/Customer/Header";
 import JumpBackIn from "../../components/Customer/JumpBackIn";
 import TopCreators from "../../components/Customer/TopCreators";
 import TrendingNow from "../../components/Customer/TrendingNow";
-import Footer from "../../components/public/Footer";
+
 
 const CustomerDashboard = () => {
   return (
@@ -19,7 +19,7 @@ const CustomerDashboard = () => {
         <TopCreators />
         <CreativeResources />
       </div>
-      <Footer />
+     
     </>
   );
 };
