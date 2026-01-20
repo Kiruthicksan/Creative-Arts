@@ -1,6 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Search } from 'lucide-react'
 
 const BrowsePageHeader = () => {
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [searchQuery, setSearchQuery] = useState("");
+    const categories = [
+    "All",
+    "Templates",
+    "3D Assets",
+    "Fonts",
+    "Graphics",
+    "Mockups",
+    "UI Kits",
+    "Icons",
+    "Textures",
+    "Video",
+    "Audio",
+  ];
   return (
     <div className="bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
