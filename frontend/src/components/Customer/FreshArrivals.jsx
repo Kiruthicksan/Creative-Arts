@@ -17,7 +17,7 @@ const FreshArrivals = () => {
         {/* Card 1: Illustrations */}
         <div className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer">
           <img
-            src="https://images.unsplash.com/pto-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800"
+            src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800"
             alt="Illustrations"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
@@ -41,7 +41,7 @@ const FreshArrivals = () => {
         {/* Card 2: Posters */}
         <div className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer">
           <img
-            src="https://images.unsplash.com/photo-1579762715118-a6f1d4b934f1?auto=format&fit=crop&q=80&w=800"
+            src="https://images.unsplash.com/photo-1572099606223-6e29045d7de3?auto=format&fit=crop&q=80&w=800"
             alt="Posters"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
@@ -63,7 +63,7 @@ const FreshArrivals = () => {
         {/* Card 3: Graphic Design */}
         <div className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer">
           <img
-            src="https://images.unsplash.com/photo-1626785774573-4b799314346d?auto=format&fit=crop&q=80&w=800"
+            src="https://images.unsplash.com/photo-1626785774573-4b7993125637?auto=format&fit=crop&q=80&w=800"
             alt="Graphic Design"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
