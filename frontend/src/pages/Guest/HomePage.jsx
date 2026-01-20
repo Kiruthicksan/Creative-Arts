@@ -37,7 +37,6 @@ const HomePage = () => {
       <FeaturedProducts />
       <Trending />
       <WhyChooseUs />
-      <Footer />
     </div>
   );
 };

@@ -3,6 +3,8 @@ import ProductCard from "./ProductCard";
 import { productsData } from "../../data/mockData";
 
 const FeaturedProducts = () => {
+
+  const featuredProducts = productsData.slice(0, 4);
   return (
     <div className="bg-gray-50">
       <div className="max-w-6xl mx-auto mb-20 px-4 py-20">
@@ -14,7 +16,7 @@ const FeaturedProducts = () => {
           Featured Products
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-10">
-          {productsData.map((product) => (
+          {featuredProducts.map((product) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </div>

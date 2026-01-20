@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Search,
   Filter,
@@ -10,10 +10,18 @@ import ProductCard from "../../components/Guest/ProductCard";
 import { productsData } from "../../data/mockData";
 
 const BrowsePage = () => {
-  // Dumb UI state for visual feedback only
+  // State
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("Newest");
+  const [selectedFilters, setSelectedFilters] = useState({
+    price: [],
+    format: [],
+    rating: [],
+  });
+  const [visibleCount, setVisibleCount] = useState(6);
 
+  // Constants
   const categories = [
     "All",
     "Illustrations",
@@ -30,21 +38,117 @@ const BrowsePage = () => {
     "Price: High to Low",
   ];
 
-  // Filters Sidebar Data (Static UI)
-  const filters = [
+  const filterOptions = [
     {
+      id: "price",
       title: "Price Range",
-      options: ["Under ₹30", "₹30 - ₹50", "₹50 - ₹100", "₹100+"],
+      options: [
+        { label: "Under ₹30", value: "under-30" },
+        { label: "₹30 - ₹50", value: "30-50" },
+        { label: "₹50 - ₹100", value: "50-100" },
+        { label: "₹100+", value: "100-plus" },
+      ],
     },
     {
+      id: "format",
       title: "File Format",
-      options: ["FIG", "PSD", "AI", "PNG/JPG", "blend"],
+      options: [
+        { label: "FIG", value: "FIG" },
+        { label: "PSD", value: "PSD" },
+        { label: "AI", value: "AI" },
+        { label: "PNG/JPG", value: "PNG" },
+        { label: "blend", value: "blend" },
+      ],
     },
     {
+      id: "rating",
       title: "Rating",
-      options: ["4 Stars & Up", "3 Stars & Up", "2 Stars & Up"],
+      options: [
+        { label: "4 Stars & Up", value: "4" },
+        { label: "3 Stars & Up", value: "3" },
+        { label: "2 Stars & Up", value: "2" },
+      ],
     },
   ];
+
+  // Handlers
+  const toggleFilter = (sectionId, value) => {
+    setSelectedFilters((prev) => {
+      const section = prev[sectionId];
+      const newSection = section.includes(value)
+        ? section.filter((item) => item !== value)
+        : [...section, value];
+      return { ...prev, [sectionId]: newSection };
+    });
+  };
+
+  // Derived State (Filtering Logic)
+  const filteredProducts = useMemo(() => {
+    return productsData.filter((product) => {
+      // 1. Search Query
+      if (
+        searchQuery &&
+        !product.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !product.description.toLowerCase().includes(searchQuery.toLowerCase())
+      ) {
+        return false;
+      }
+
+      // 2. Category
+      if (selectedCategory !== "All" && product.category !== selectedCategory) {
+        return false;
+      }
+
+      // 3. Price Filter
+      if (selectedFilters.price.length > 0) {
+        const passesPrice = selectedFilters.price.some((range) => {
+          if (range === "under-30") return product.price < 30;
+          if (range === "30-50")
+            return product.price >= 30 && product.price <= 50;
+          if (range === "50-100")
+            return product.price > 50 && product.price <= 100;
+          if (range === "100-plus") return product.price > 100;
+          return false;
+        });
+        if (!passesPrice) return false;
+      }
+
+      // 4. Format Filter
+      if (selectedFilters.format.length > 0) {
+        if (!selectedFilters.format.includes(product.fileFormat)) return false;
+      }
+
+      // 5. Rating Filter
+      if (selectedFilters.rating.length > 0) {
+        const passesRating = selectedFilters.rating.some(
+          (minRating) => product.rating >= Number(minRating),
+        );
+        if (!passesRating) return false;
+      }
+
+      return true;
+    });
+  }, [productsData, searchQuery, selectedCategory, selectedFilters]);
+
+  // Derived State (Sorting Logic)
+  const sortedProducts = useMemo(() => {
+    return [...filteredProducts].sort((a, b) => {
+      switch (sortBy) {
+        case "Newest":
+          return b.id - a.id;
+        case "Popular":
+          return b.downloads - a.downloads;
+        case "Price: Low to High":
+          return a.price - b.price;
+        case "Price: High to Low":
+          return b.price - a.price;
+        default:
+          return 0;
+      }
+    });
+  }, [filteredProducts, sortBy]);
+
+  const displayedProducts = sortedProducts.slice(0, visibleCount);
 
   return (
     <div className="min-h-screen bg-white">
@@ -68,6 +172,8 @@ const BrowsePage = () => {
               />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search 'Abstract 3D' or 'Minimalist Logo'..."
                 className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 outline-none transition-all"
               />
@@ -101,28 +207,45 @@ const BrowsePage = () => {
             <SlidersHorizontal size={18} /> Filters
           </div>
 
-          {filters.map((section, idx) => (
-            <div key={idx}>
+          {filterOptions.map((section) => (
+            <div key={section.id}>
               <h3 className="font-semibold text-gray-900 mb-3 text-sm">
                 {section.title}
               </h3>
               <div className="space-y-2">
-                {section.options.map((opt, i) => (
-                  <label
-                    key={i}
-                    className="flex items-center gap-3 cursor-pointer group"
-                  >
-                    <div className="w-5 h-5 rounded border border-gray-300 flex items-center justify-center group-hover:border-purple-500 transition-colors bg-white">
-                      {/* Dummy check state */}
-                      {i === 0 && idx === 0 && (
-                        <Check size={12} className="text-purple-600" />
-                      )}
-                    </div>
-                    <span className="text-gray-600 text-sm group-hover:text-gray-900 transition-colors">
-                      {opt}
-                    </span>
-                  </label>
-                ))}
+                {section.options.map((opt) => {
+                  const isSelected = selectedFilters[section.id].includes(
+                    opt.value,
+                  );
+                  return (
+                    <label
+                      key={opt.value}
+                      className="flex items-center gap-3 cursor-pointer group select-none"
+                    >
+                      <div
+                        className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${
+                          isSelected
+                            ? "bg-purple-600 border-purple-600"
+                            : "bg-white border-gray-300 group-hover:border-purple-500"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleFilter(section.id, opt.value);
+                        }}
+                      >
+                        {isSelected && (
+                          <Check size={12} className="text-white" />
+                        )}
+                      </div>
+                      <span
+                        className={`text-sm transition-colors ${isSelected ? "text-gray-900 font-medium" : "text-gray-600 group-hover:text-gray-900"}`}
+                        onClick={() => toggleFilter(section.id, opt.value)}
+                      >
+                        {opt.label}
+                      </span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
           ))}
@@ -133,20 +256,24 @@ const BrowsePage = () => {
           {/* Sort & Results Bar */}
           <div className="flex items-center justify-between mb-6">
             <span className="text-gray-500 text-sm font-medium">
-              Showing 124 results
+              Showing {sortedProducts.length} results
             </span>
 
             <div className="relative group">
               <button className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-purple-600 transition-colors">
                 {sortBy} <ChevronDown size={14} />
               </button>
-              {/* Dropdown (Visual only) */}
+              {/* Dropdown */}
               <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10 py-2">
                 {sortOptions.map((opt) => (
                   <button
                     key={opt}
                     onClick={() => setSortBy(opt)}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-purple-600"
+                    className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 hover:text-purple-600 ${
+                      sortBy === opt
+                        ? "text-purple-600 font-medium"
+                        : "text-gray-600"
+                    }`}
                   >
                     {opt}
                   </button>
@@ -156,19 +283,48 @@ const BrowsePage = () => {
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Repeat specific products multiple times to fill the grid for demo */}
-            {[...productsData, ...productsData].map((product, idx) => (
-              <ProductCard key={idx} {...product} />
-            ))}
-          </div>
+          {displayedProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {displayedProducts.map((product) => (
+                <ProductCard key={product.id} {...product} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <Search className="text-gray-400" size={24} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">
+                No products found
+              </h3>
+              <p className="text-gray-500">
+                Try adjusting your search or filters to find what you're looking
+                for.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("All");
+                  setSelectedFilters({ price: [], format: [], rating: [] });
+                }}
+                className="mt-6 text-purple-600 font-semibold hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
 
           {/* Load More */}
-          <div className="mt-12 flex justify-center">
-            <button className="px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-semibold hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 transition-all">
-              Load More Assets
-            </button>
-          </div>
+          {displayedProducts.length < sortedProducts.length && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + 6)}
+                className="px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-semibold hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 transition-all"
+              >
+                Load More Assets
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -17,7 +17,7 @@ const FreshArrivals = () => {
         {/* Card 1: Illustrations */}
         <div className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer">
           <img
-            src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800"
+            src="https://images.unsplash.com/pto-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800"
             alt="Illustrations"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />

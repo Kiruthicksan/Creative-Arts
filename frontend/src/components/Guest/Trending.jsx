@@ -6,6 +6,8 @@ const Trending = () => {
 
   const trendingData = [...productsData].reverse();
 
+  const trendingProducts = trendingData.slice(0, 4);
+
   return (
     <div className="max-w-6xl mx-auto mb-20 px-4">
       <p className="flex items-center gap-2 text-purple-600 mb-2">
@@ -14,7 +16,7 @@ const Trending = () => {
       </p>
       <h2 className="text-2xl font-bold mb-4">Trending This Week</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {trendingData.map((product) => (
+        {trendingProducts.map((product) => (
           <ProductCard key={product.id} {...product} />
         ))}
       </div>
