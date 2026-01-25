@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import cloudinary from "../config/cloudinary";
-import secret from "../utils/secret";
+import cloudinary from "../config/cloudinary.js";
+import secret from "../utils/secret.js";
 export const uploadFile = async (req, res) => {
   try {
     const timestamp = Math.round(Date.now() / 1000);

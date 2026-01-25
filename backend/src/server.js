@@ -6,6 +6,8 @@ import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import assestsRoutes from "./routes/assests.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
 const app = express();
 
 app.use(express.json());
@@ -22,6 +24,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/assests", assestsRoutes);
+app.use("/api/upload", uploadRoutes);
 
 const server = async () => {
   try {

@@ -1,10 +1,10 @@
-import {v2 as cloudinary} from 'cloudinary';
-import secret from '../utils/secret';
+import { v2 as cloudinary } from "cloudinary";
+import secret from "../utils/secret.js";
 
 cloudinary.config({
-  cloud_name: secret.CLOUDINARY_CLOUD_NAME,
-  api_key: secret.CLOUDINARY_API_KEY,
-  api_secret: secret.CLOUDINARY_API_SECRET,
+  cloud_name: secret.cloudinary.cloud_name,
+  api_key: secret.cloudinary.api_key,
+  api_secret: secret.cloudinary.api_secret,
 });
 
 export default cloudinary;

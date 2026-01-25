@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const AssestsSchema = new mongoose.Schema(
   {
     title: {
@@ -21,10 +23,18 @@ const AssestsSchema = new mongoose.Schema(
         "Other",
       ],
     },
-    image: {
-      type: String,
-      required: true,
-    },
+    image: [
+      {
+        public_id: {
+          type: String,
+          required: true,
+        },
+        secure_url: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     price: {
       type: Number,
       required: true,
