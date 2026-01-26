@@ -20,8 +20,13 @@ const AssestsSchema = new mongoose.Schema(
         "Posters",
         "Graphic Design",
         "Short Novels",
+        "ConceptArt",
         "Other",
       ],
+    },
+    included : {
+      type : String,
+      required : true
     },
     image: [
       {

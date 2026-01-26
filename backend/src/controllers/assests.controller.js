@@ -15,6 +15,7 @@ export const createAssest = async (req, res) => {
     const {
       title,
       description,
+      included,
       category,
       price,
       originalPrice,
@@ -25,27 +26,32 @@ export const createAssest = async (req, res) => {
 
     let imageData = [];
 
-    if (req.file) {
-      const result = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "creative-arts/assets" },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          },
-        );
-        stream.end(req.file.buffer);
-      });
+if (req.files && req.files.length > 0) {
+  const uploadPromises = req.files.map((file) => {
+    return new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "creative-arts/assets" },
+        (error, result) => {
+          if (error) return reject(error);
+       
+          resolve({
+            public_id: result.public_id,
+            secure_url: result.secure_url,
+          });
+        }
+      );
+      stream.end(file.buffer);
+    });
+  });
 
-      imageData.push({
-        public_id: result.public_id,
-        secure_url: result.secure_url,
-      });
-    }
+
+  imageData = await Promise.all(uploadPromises);
+}
 
     const assest = await Assests.create({
       title,
       description,
+      included,
       category,
       image: imageData,
       price,
@@ -55,7 +61,8 @@ export const createAssest = async (req, res) => {
       rating,
     });
     res.status(201).json(assest);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+
 };

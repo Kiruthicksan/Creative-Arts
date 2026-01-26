@@ -4,5 +4,5 @@ import { upload } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 router.get("/", getAssests);
-router.post("/", upload.single("image"), createAssest);
+router.post("/", upload.array("images", 10), createAssest);
 export default router;
