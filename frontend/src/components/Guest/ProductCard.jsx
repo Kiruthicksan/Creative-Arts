@@ -4,17 +4,17 @@ import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({
   id,
-  image ,
-  title ,
-  author ,
-  description ,
-  rating ,
-  reviews ,
-  downloads ,
-  price ,
-  originalPrice ,
-  discount ,
-  featured ,
+  image,
+  title,
+  author,
+  description,
+  rating,
+  reviews,
+  downloads,
+  price,
+  originalPrice,
+  discount,
+  featured,
 }) => {
 
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const ProductCard = ({
             />
           </div>
           <span className="text-[11px] font-medium text-gray-500 hover:text-gray-900 transition-colors">
-            by <span className="font-bold text-gray-700">{author}</span>
+            by <span className="font-bold text-gray-700">{author.charAt(0).toUpperCase() + author.slice(1).toLowerCase()}</span>
           </span>
         </div>
 

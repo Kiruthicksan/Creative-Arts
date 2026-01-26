@@ -1,8 +1,13 @@
-import { productsData } from "../../data/mockData";
+
 import ProductCard from "../Guest/ProductCard";
+import useAssestsStore from "../../store/useAssestsStore";
 
 const TrendingNow = () => {
-  const trendingProducts = productsData.slice(0, 4);
+
+  const { assests } = useAssestsStore();
+  const trendingProducts = assests.slice(0, 4);
+
+
 
   return (
     <div className="mb-20">
@@ -20,8 +25,9 @@ const TrendingNow = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {trendingProducts.map((product) => (
-          <ProductCard key={product.id} {...product} />
+          <ProductCard key={product._id} {...product} image={product.image?.[0]?.secure_url} />
         ))}
+
       </div>
     </div>
   );

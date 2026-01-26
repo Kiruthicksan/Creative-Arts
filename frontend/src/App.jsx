@@ -12,13 +12,18 @@ import CustomerLayout from "./layouts/CustomerLayout";
 import ProductDetailsPage from "./pages/Guest/ProductDetailsPage";
 import BrowsePage from "./pages/Guest/BrowsePage";
 import ProductsPage from "./pages/Admin/ProductsPage";
+import useAssestsStore from "./store/useAssestsStore";
 
 const App = () => {
-  const { user, profile } = useAuthStore();
+  const { profile } = useAuthStore();
+  const { assests, getAssests } = useAssestsStore();
 
   useEffect(() => {
     profile();
+    getAssests();
   }, []);
+
+  console.log(assests)
 
   return (
     <BrowserRouter>
