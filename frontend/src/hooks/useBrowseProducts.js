@@ -8,6 +8,7 @@ export const useBrowseProducts = ({
   sortBy,
   visibleCount,
 }) => {
+  // Filter products based on search, category, price, and rating.
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       // Search
@@ -37,18 +38,18 @@ export const useBrowseProducts = ({
         });
         if (!passesPrice) return false;
       }
-
+        // Rating
       if (selectedFilters.rating.length > 0) {
         const passesRating = selectedFilters.rating.some((minRating) => {
           product.rating >= Number(minRating);
         });
         if (!passesRating) return false;
       }
-
       return true;
     });
   }, [products, selectedCategory, selectedFilters, searchQuery]);
 
+// Sort products based on selected sort option.
   const sortedProducts = useMemo(() => {
     return [...filteredProducts].sort((a, b) => {
       switch (sortBy) {
@@ -66,6 +67,7 @@ export const useBrowseProducts = ({
     });
   }, [filteredProducts, sortBy]);
 
+// Display products based on visible count.
   const displayedProducts = sortedProducts.slice(0, visibleCount);
 
   return {
