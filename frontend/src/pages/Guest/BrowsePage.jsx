@@ -2,6 +2,7 @@ import { useState} from "react";
 import useAssestsStore from "../../store/useAssestsStore";
 import BrowseHeader from "../../components/Guest/BrowsePage/BrowseHeader";
 import {
+  categories,
   DEFAULT_FILTERS,
   filterOptions,
   sortOptions,

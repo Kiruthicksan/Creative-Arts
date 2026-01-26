@@ -20,10 +20,10 @@ export const filterOptions = [
     id: "price",
     title: "Price Range",
     options: [
-      { label: "Under ₹30", value: "under-30" },
-      { label: "₹30 - ₹50", value: "30-50" },
-      { label: "₹50 - ₹100", value: "50-100" },
-      { label: "₹100+", value: "100-plus" },
+      { label: "Under ₹500", value: "under-500" },
+      { label: "₹500 - ₹1000", value: "500-1000" },
+      { label: "₹1000 - ₹2000", value: "1000-2000" },
+      { label: "₹2000+", value: "2000-plus" },
     ],
   },
 
