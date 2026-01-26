@@ -16,7 +16,13 @@ export const useBrowseProducts = ({
         const query = searchQuery.toLowerCase();
         const title = product.title?.toLowerCase() || "";
         const description = product.description?.toLowerCase() || "";
-        if (!title.includes(query) && !description.includes(query)) {
+        const author = product.author?.toLowerCase() || "";
+
+        if (
+          !title.includes(query) &&
+          !description.includes(query) &&
+          !author.includes(query)
+        ) {
           return false;
         }
       }
@@ -38,7 +44,7 @@ export const useBrowseProducts = ({
         });
         if (!passesPrice) return false;
       }
-        // Rating
+      // Rating
       if (selectedFilters.rating.length > 0) {
         const passesRating = selectedFilters.rating.some((minRating) => {
           product.rating >= Number(minRating);
@@ -49,7 +55,7 @@ export const useBrowseProducts = ({
     });
   }, [products, selectedCategory, selectedFilters, searchQuery]);
 
-// Sort products based on selected sort option.
+  // Sort products based on selected sort option.
   const sortedProducts = useMemo(() => {
     return [...filteredProducts].sort((a, b) => {
       switch (sortBy) {
@@ -67,7 +73,7 @@ export const useBrowseProducts = ({
     });
   }, [filteredProducts, sortBy]);
 
-// Display products based on visible count.
+  // Display products based on visible count.
   const displayedProducts = sortedProducts.slice(0, visibleCount);
 
   return {

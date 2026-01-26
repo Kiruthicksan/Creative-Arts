@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import useAssestsStore from "../../store/useAssestsStore";
 import BrowseHeader from "../../components/Guest/BrowsePage/BrowseHeader";
 import {
@@ -16,19 +17,21 @@ import LoadMoreButton from "../../components/Guest/BrowsePage/LoadMoreButton";
 
 const BrowsePage = ({ category }) => {
   // States to manage the options.
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(category || "All");
-
-  useEffect(() => {
-    if (category) {
-      setSelectedCategory(category);
-    }else{
-      setSelectedCategory("All");
-    }
-  }, [category]);
   const [sortBy, setSortBy] = useState("Newest");
   const [selectedFilters, setSelectedFilters] = useState(DEFAULT_FILTERS);
   const [visibleCount, setVisibleCount] = useState(6);
+
+  // useEffect to set the category.
+  useEffect(() => {
+    if (category) {
+      setSelectedCategory(category);
+    } else {
+      setSelectedCategory("All");
+    }
+  }, [category]);
 
   // Store.
   const { assests } = useAssestsStore();
