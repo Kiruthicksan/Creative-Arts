@@ -1,11 +1,13 @@
+import { useState } from "react"
 
 
 const ProductGallery = ({product}) => {
+  const [activeImage, setActiveImage] = useState(product.image?.[0]?.secure_url)
   return (
     <div className="w-full lg:w-1/2 flex flex-col gap-6">
           <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-sm group">
             <img
-              src={product.image}
+              src={activeImage}
               alt={product.title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -30,15 +32,27 @@ const ProductGallery = ({product}) => {
           <div className="flex gap-4">
             <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-indigo-600 cursor-pointer p-0.5">
               <img
-                src={product.image}
+                src={product.image?.[0]?.secure_url}
                 alt=""
                 className="w-full h-full object-cover rounded-xl"
+                onClick={() => setActiveImage(product.image?.[0]?.secure_url)}
               />
             </div>
             <div className="w-24 h-24 rounded-2xl overflow-hidden border border-transparent hover:border-gray-300 cursor-pointer opacity-70 hover:opacity-100 transition-all">
-              <div className="w-full h-full bg-slate-900 flex items-center justify-center">
-                <span className="text-xs text-gray-500 font-mono">CODE</span>
-              </div>
+             <img
+                src={product.image?.[1]?.secure_url}
+                alt=""
+                className="w-full h-full object-cover rounded-xl"
+                onClick={() => setActiveImage(product.image?.[1]?.secure_url)}
+              />
+            </div>
+            <div className="w-24 h-24 rounded-2xl overflow-hidden border border-transparent hover:border-gray-300 cursor-pointer opacity-70 hover:opacity-100 transition-all">
+             <img
+                src={product.image?.[2]?.secure_url}
+                alt=""
+                className="w-full h-full object-cover rounded-xl"
+                onClick={() => setActiveImage(product.image?.[2]?.secure_url)}
+              />
             </div>
           </div>
         </div>

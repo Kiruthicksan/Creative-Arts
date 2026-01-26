@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import ProductCard from "../../components/Guest/ProductCard";
 import { productsData } from "../../data/mockData";
+import useAssestsStore from "../../store/useAssestsStore";
 
 const BrowsePage = () => {
   // State
@@ -20,6 +21,8 @@ const BrowsePage = () => {
     rating: [],
   });
   const [visibleCount, setVisibleCount] = useState(6);
+
+  const {assests} = useAssestsStore()
 
   // Constants
   const categories = [

@@ -14,6 +14,15 @@ const useAssestsStore = create((set) => ({
       set({ error: error.message });
     }
   },
+
+  getAssetsById : async (id) => {
+    try {
+      const response = await API.get(`/assets/${id}`);
+      set({ asset: response.data });
+    } catch (error) {
+      set({ error: error.message });
+    }
+  }
 }));
 
 export default useAssestsStore;

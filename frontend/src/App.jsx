@@ -23,7 +23,7 @@ const App = () => {
     getAssests();
   }, []);
 
-  console.log(assests)
+  
 
   return (
     <BrowserRouter>

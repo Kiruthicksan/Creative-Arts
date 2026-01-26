@@ -63,9 +63,7 @@ const ProductDescriptionAndReviews = ({ product, activeTab, setActiveTab }) => {
                 What's Included
               </h3>
               <ul className="space-y-2 list-none">
-                <li className="flex items-center gap-2">
-                  High-resolution files in multiple formats (PDF, EPUB)
-                </li>
+                <li className="flex items-center gap-2">{product.included}</li>
                 <li className="flex items-center gap-2">
                   Complete documentation and usage guide
                 </li>
