@@ -10,6 +10,15 @@ export const getAssests = async (req, res) => {
   }
 };
 
+export const getAssetsById = async (req, res) => {
+  try {
+    const asset = await Assests.findById(req.params.id);
+    res.status(200).json(asset);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const createAssest = async (req, res) => {
   try {
     const {
