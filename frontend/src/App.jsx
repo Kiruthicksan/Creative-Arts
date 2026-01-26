@@ -23,8 +23,6 @@ const App = () => {
     getAssests();
   }, []);
 
-  
-
   return (
     <BrowserRouter>
       <Routes>
@@ -36,6 +34,18 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductDetailsPage />} />
           <Route path="/browse" element={<BrowsePage />} />
+          <Route
+            path="/graphics"
+            element={<BrowsePage category="Graphic Design" />}
+          />
+          <Route
+            path="/illustrations"
+            element={<BrowsePage category="Illustrations" />}
+          />
+          <Route
+            path="/ebooks"
+            element={<BrowsePage category="Short Novels" />}
+          />
         </Route>
 
         {/* Customer Routes */}

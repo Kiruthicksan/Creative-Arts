@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useEffect, useState } from "react";
 import useAssestsStore from "../../store/useAssestsStore";
 import BrowseHeader from "../../components/Guest/BrowsePage/BrowseHeader";
 import {
@@ -14,10 +14,18 @@ import ProductGrid from "../../components/Guest/BrowsePage/ProductGrid";
 import EmptyState from "../../components/Guest/BrowsePage/EmptyState";
 import LoadMoreButton from "../../components/Guest/BrowsePage/LoadMoreButton";
 
-const BrowsePage = () => {
+const BrowsePage = ({ category }) => {
   // States to manage the options.
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState(category || "All");
+
+  useEffect(() => {
+    if (category) {
+      setSelectedCategory(category);
+    }else{
+      setSelectedCategory("All");
+    }
+  }, [category]);
   const [sortBy, setSortBy] = useState("Newest");
   const [selectedFilters, setSelectedFilters] = useState(DEFAULT_FILTERS);
   const [visibleCount, setVisibleCount] = useState(6);
