@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/assests", assestsRoutes);
+app.use("/api/assets", assestsRoutes);
 app.use("/api/upload", uploadRoutes);
 
 const server = async () => {
