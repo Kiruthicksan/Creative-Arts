@@ -11,6 +11,7 @@ import useAuthStore from "./store/useAuthStore";
 import CustomerLayout from "./layouts/CustomerLayout";
 import ProductDetailsPage from "./pages/Guest/ProductDetailsPage";
 import BrowsePage from "./pages/Guest/BrowsePage";
+import ProductsPage from "./pages/Admin/ProductsPage";
 
 const App = () => {
   const { user, profile } = useAuthStore();
@@ -43,6 +44,7 @@ const App = () => {
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin-products" element={<ProductsPage />} />
           </Route>
         </Route>
       </Routes>
