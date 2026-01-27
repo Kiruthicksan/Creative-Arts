@@ -1,0 +1,126 @@
+import mongoose from "mongoose";
+import { Assests } from "../models/assests.schema.js";
+import Cart from "../models/cart.schema.js";
+
+
+export const addToCart = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { assetId, quantity = 1 } = req.body;
+
+    // ---------- VALIDATION ----------
+    if (!mongoose.Types.ObjectId.isValid(assetId)) {
+      return res.status(400).json({ message: "Invalid asset id" });
+    }
+
+    if (quantity < 1) {
+      return res
+        .status(400)
+        .json({ message: "Quantity must be greater than 0" });
+    }
+
+    // ---------- FIND ASSET ----------
+    const asset = await Assests.findById(assetId).lean();
+    if (!asset) {
+      return res.status(404).json({ message: "Asset not found" });
+    }
+
+
+    // ---------- GET OR CREATE CART ----------
+    let cart = await Cart.findOne({ user: userId });
+
+    if (!cart) {
+      cart = new Cart({
+        user: userId,
+        items: [],
+      });
+    }
+
+    // ---------- CHECK EXISTING ITEM ----------
+    const itemIndex = cart.items.findIndex(
+      (item) => item.asset.toString() === assetId
+    );
+
+    if (itemIndex > -1) {
+      cart.items[itemIndex].quantity += quantity;
+    } else {
+      cart.items.push({
+        asset: assetId,
+        quantity,
+        priceAtAdd: asset.price, 
+      });
+    }
+
+    // ---------- RECALCULATE TOTALS ----------
+    cart.totalItems = cart.items.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
+
+    cart.totalPrice = cart.items.reduce(
+      (sum, item) => sum + item.quantity * item.priceAtAdd,
+      0
+    );
+
+    await cart.save();
+
+    return res.status(200).json({
+      message: "Asset added to cart",
+      cart,
+    });
+  } catch (error) {
+    console.error("Add to cart error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+export const getCart = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // ---------- FIND CART ----------
+    let cart = await Cart.findOne({ user: userId })
+      .populate({
+        path: "items.asset",
+        select: "title previewImages price discount",
+      })
+      .lean();
+
+    // ---------- IF NO CART, RETURN EMPTY ----------
+    if (!cart) {
+      return res.status(200).json({
+        cart: {
+          items: [],
+          totalItems: 0,
+          totalPrice: 0,
+        },
+      });
+    }
+
+    // ---------- RECALCULATE TOTALS (DEFENSIVE) ----------
+    const totalItems = cart.items.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
+
+    const totalPrice = cart.items.reduce(
+      (sum, item) => sum + item.quantity * item.price,
+      0
+    );
+
+    return res.status(200).json({
+      cart: {
+        _id: cart._id,
+        items: cart.items,
+        totalItems,
+        totalPrice,
+      },
+    });
+  } catch (error) {
+    console.error("Get cart error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
