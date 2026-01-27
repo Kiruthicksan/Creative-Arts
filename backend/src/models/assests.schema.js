@@ -24,11 +24,11 @@ const AssestsSchema = new mongoose.Schema(
         "Other",
       ],
     },
-    included : {
-      type : String,
-      required : true
+    included: {
+      type: String,
+      required: true,
     },
-    image: [
+    previewImages: [
       {
         public_id: {
           type: String,
@@ -40,6 +40,17 @@ const AssestsSchema = new mongoose.Schema(
         },
       },
     ],
+    downloadFile: {
+      public_id: String,
+      secure_url: String,
+      format: String,
+      size: Number,
+      version: {
+        type: String,
+        default: "v1.0",
+      },
+    },
+
     price: {
       type: Number,
       required: true,
