@@ -4,10 +4,10 @@ import useAssestsStore from "../../store/useAssestsStore";
 
 const TrendingNow = () => {
 
-  const { assests } = useAssestsStore();
+  const { assests , loading} = useAssestsStore();
   const trendingProducts = assests.slice(0, 4);
 
-
+ 
 
   return (
     <div className="mb-20">
@@ -25,7 +25,7 @@ const TrendingNow = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {trendingProducts.map((product) => (
-          <ProductCard key={product._id} {...product} image={product.image?.[0]?.secure_url} id={product._id}/>
+          <ProductCard key={product._id} {...product} image={product.previewImages?.[0]?.secure_url} id={product._id}/>
         ))}
 
       </div>

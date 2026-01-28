@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const ProductGallery = ({ product }) => {
   const scrollRef = useRef(null);
   const [activeImage, setActiveImage] = useState(
-    product.image?.[0]?.secure_url,
+    product.previewImages?.[0]?.secure_url,
   );
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -59,7 +59,7 @@ const ProductGallery = ({ product }) => {
           ref={scrollRef}
           className="flex-1 flex gap-4 overflow-x-auto pb-2 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth"
         >
-          {product.image?.map((image, index) => (
+          {product.previewImages?.map((image, index) => (
             <div
               key={index}
               className={`w-24 h-24 shrink-0 rounded-2xl overflow-hidden border-2 cursor-pointer p-0.5 snap-start transition-all duration-300 ${

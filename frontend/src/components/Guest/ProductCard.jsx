@@ -1,6 +1,7 @@
 import { Star, Download, ShoppingCart, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import useCartStore from "../../store/useCartStore";
 
 const ProductCard = ({
   id,
@@ -16,8 +17,14 @@ const ProductCard = ({
   discount,
   featured,
 }) => {
-
   const navigate = useNavigate();
+
+  const isInCart = useCartStore((state) => state.isInCart(id));
+  const { addToCart, loading } = useCartStore();
+  const handleClick = () => {
+    if (isInCart) return;
+    addToCart(id);
+  };
   return (
     <motion.div
       whileHover={{ scale: 1.01, y: -5 }}
@@ -68,7 +75,10 @@ const ProductCard = ({
             />
           </div>
           <span className="text-[11px] font-medium text-gray-500 hover:text-gray-900 transition-colors">
-            by <span className="font-bold text-gray-700">{author.charAt(0).toUpperCase() + author.slice(1).toLowerCase()}</span>
+            by{" "}
+            <span className="font-bold text-gray-700">
+              {author.charAt(0).toUpperCase() + author.slice(1).toLowerCase()}
+            </span>
           </span>
         </div>
 
@@ -110,11 +120,13 @@ const ProductCard = ({
             </div>
           </div>
           <motion.button
+            disabled={loading || isInCart}
             whileTap={{ scale: 0.95 }}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-lg shadow-purple-200 transition-colors"
+            className={`bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-lg shadow-purple-200 transition-colors ${isInCart ? "opacity-50 cursor-not-allowed" : ""}`}
+            onClick={handleClick}
           >
             <ShoppingCart className="w-3.5 h-3.5" />
-            Add
+            {isInCart ? "In Cart" : "Add to Cart"}
           </motion.button>
         </div>
       </div>

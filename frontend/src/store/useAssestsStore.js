@@ -8,19 +8,25 @@ const useAssestsStore = create((set) => ({
 
   getAssests: async () => {
     try {
+      set({ loading: true });
       const response = await API.get("/assets");
       set({ assests: response.data });
     } catch (error) {
       set({ error: error.message });
+    } finally {
+      set({ loading: false });
     }
   },
 
   getAssetsById : async (id) => {
-    try {
+    try { 
+      set({ loading: true });
       const response = await API.get(`/assets/${id}`);
       set({ asset: response.data });
     } catch (error) {
       set({ error: error.message });
+    } finally {
+      set({ loading: false });
     }
   }
 }));

@@ -1,16 +1,25 @@
 import { motion } from "framer-motion";
 import { ShoppingCart, Heart, Share2, CheckCircle } from "lucide-react";
+import useCartStore from "../../store/useCartStore";
 
 const PurchasePanel = ({ product }) => {
+  const { addToCart, loading } = useCartStore();
+  const isInCart = useCartStore((state) => state.isInCart(product._id));
+  const handleClick = () => {
+    if (isInCart) return;
+    addToCart(product._id);
+  };
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-3">
         <motion.button
+          disabled={loading || isInCart}
           whileTap={{ scale: 0.95 }}
-          className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3.5 rounded-xl flex items-center justify-center gap-2 text-base font-semibold shadow-lg shadow-purple-200 transition-all"
+          className={`flex-1 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3.5 rounded-xl flex items-center justify-center gap-2 text-base font-semibold shadow-lg shadow-purple-200 transition-all ${isInCart ? "opacity-50 cursor-not-allowed" : ""}`}
+          onClick={handleClick}
         >
           <ShoppingCart className="w-5 h-5" />
-          Add to Cart
+          {isInCart ? "In Cart" : "Add to Cart"}
         </motion.button>
 
         <motion.button

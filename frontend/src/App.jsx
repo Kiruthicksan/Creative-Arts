@@ -13,18 +13,27 @@ import ProductDetailsPage from "./pages/Guest/ProductDetailsPage";
 import BrowsePage from "./pages/Guest/BrowsePage";
 import ProductsPage from "./pages/Admin/ProductsPage";
 import useAssestsStore from "./store/useAssestsStore";
+import useCartStore from "./store/useCartStore";
+import { Toaster } from "react-hot-toast";
+import CartPage from "./pages/Customer/CartPage";
 
 const App = () => {
   const { profile } = useAuthStore();
-  const { assests, getAssests } = useAssestsStore();
+  const { getAssests, loading } = useAssestsStore();
+  const { getCart} = useCartStore();
 
+ 
   useEffect(() => {
     profile();
     getAssests();
+    getCart();
   }, []);
 
+ 
   return (
     <BrowserRouter>
+    <Toaster position="top-center" reverseOrder={false} />
+      
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
@@ -52,6 +61,7 @@ const App = () => {
         <Route element={<ProtectedRoute allowedRoles={["customer"]} />}>
           <Route element={<CustomerLayout />}>
             <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+             <Route path="/cart" element={<CartPage />} />
           </Route>
         </Route>
 
