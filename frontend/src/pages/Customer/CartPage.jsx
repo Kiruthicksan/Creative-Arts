@@ -7,12 +7,14 @@ import {
   ShieldCheck,
   Check,
   ShoppingBag,
+  Minus,
+  Plus,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const CartPage = () => {
-  const { cart, removeFromCart } = useCartStore();
+  const { cart, removeFromCart, updateQuantity } = useCartStore();
 
   if (cart.items.length === 0) {
     return (
@@ -82,6 +84,41 @@ const CartPage = () => {
                         <p className="text-xs text-gray-400 mt-1">
                           Digital download - Instant access
                         </p>
+
+                        {/* Quantity Selector */}
+                        <div className="mt-4 flex items-center gap-3">
+                          <span className="text-sm text-gray-500 font-medium">
+                            Qty:
+                          </span>
+                          <div className="flex items-center border border-gray-200 rounded-lg bg-gray-50">
+                            <button
+                              onClick={() =>
+                                updateQuantity(
+                                  item.asset._id,
+                                  Math.max(1, item.quantity - 1),
+                                )
+                              }
+                              disabled={item.quantity <= 1}
+                              className="p-1.5 hover:bg-white hover:shadow-sm rounded-md transition-all text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              <Minus className="w-3.5 h-3.5" />
+                            </button>
+                            <span className="w-8 text-center text-sm font-semibold text-gray-900">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() =>
+                                updateQuantity(
+                                  item.asset._id,
+                                  item.quantity + 1,
+                                )
+                              }
+                              className="p-1.5 hover:bg-white hover:shadow-sm rounded-md transition-all text-gray-600"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Actions & Price */}

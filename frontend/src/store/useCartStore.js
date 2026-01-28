@@ -39,11 +39,26 @@ const useCartStore = create((set, get) => ({
   removeFromCart: async (assetId) => {
     try {
       set({ loading: true });
-      const response = await API.post("/cart/remove-from-cart", {
-        assetId,
+      const response = await API.delete("/cart/remove-cart", {
+        data: { assetId },
       });
       set({ cart: response.data.cart });
       toast.success("Asset removed from cart");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+  updateQuantity: async (assetId, quantity) => {
+    try {
+      set({ loading: true });
+      const response = await API.put("/cart/update-quantity", {
+        assetId,
+        quantity,
+      });
+      set({ cart: response.data.cart });
+      toast.success("Quantity updated in cart");
     } catch (error) {
       console.log(error);
     } finally {
