@@ -59,6 +59,11 @@ export const addToCart = async (req, res) => {
 
     await cart.save();
 
+    await cart.populate({
+      path: "items.asset",
+      select: "title previewImages price discount author",
+    });
+
     return res.status(200).json({
       message: "Asset added to cart",
       cart,
@@ -110,7 +115,7 @@ export const removeCart = async (req, res) => {
       { new: true },
     ).populate({
       path: "items.asset",
-      select: "title previewImages price discount",
+      select: "title previewImages price discount author",
     });
 
     if (!updatedCart) {
@@ -152,7 +157,7 @@ export const updateQuantity = async (req, res) => {
       },
     ).populate({
       path: "items.asset",
-      select: "title previewImages price discount",
+      select: "title previewImages price discount author",
     });
 
     if (!updatedCart) {
