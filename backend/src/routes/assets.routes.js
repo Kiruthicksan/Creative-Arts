@@ -1,25 +1,29 @@
 import express from "express";
 import {
-  createAssest,
-  getAssests,
+  createAsset,
+  getAssets,
   getAssetsById,
-  updateAssest,
-} from "../controllers/assests.controller.js";
+  updateAsset,
+} from "../controllers/assets.controller.js";
 import { upload } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
-router.get("/", getAssests);
+router.get("/", getAssets);
 router.get("/:id", getAssetsById);
 router.post(
   "/",
   upload.fields([
-    { name: "images", maxCount: 10 },
+    { name: "previewImages", maxCount: 10 },
     { name: "downloadFile", maxCount: 1 },
   ]),
-  createAssest,
+  createAsset,
 );
-router.put("/:id", upload.fields([
-    { name: "images", maxCount: 10 },
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "previewImages", maxCount: 10 },
     { name: "downloadFile", maxCount: 1 },
-  ]), updateAssest);
+  ]),
+  updateAsset,
+);
 export default router;

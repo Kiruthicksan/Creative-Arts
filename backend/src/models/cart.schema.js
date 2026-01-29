@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const cartItemSchema = new mongoose.Schema({
   asset: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Assests",
+    ref: "Assets",
   },
   quantity: {
     type: Number,

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const AssestsSchema = new mongoose.Schema(
+const AssetsSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -85,4 +85,4 @@ const AssestsSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const Assests = mongoose.model("Assests", AssestsSchema);
+export const Assets = mongoose.model("Assets", AssetsSchema);

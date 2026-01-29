@@ -1,10 +1,11 @@
-import { Assests } from "../models/assests.schema.js";
+import { Assets } from "../models/assets.schema.js";
 import cloudinary from "../config/cloudinary.js";
+import slugify from "slugify";
 
-export const getAssests = async (req, res) => {
+export const getAssets = async (req, res) => {
   try {
-    const assests = await Assests.find();
-    res.status(200).json(assests);
+    const assets = await Assets.find();
+    res.status(200).json(assets);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -12,14 +13,14 @@ export const getAssests = async (req, res) => {
 
 export const getAssetsById = async (req, res) => {
   try {
-    const asset = await Assests.findById(req.params.id);
+    const asset = await Assets.findById(req.params.id);
     res.status(200).json(asset);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-export const createAssest = async (req, res) => {
+export const createAsset = async (req, res) => {
   const uploadedImagePublicIds = [];
   let uploadedDownloadPublicId = null;
 
@@ -44,9 +45,9 @@ export const createAssest = async (req, res) => {
     /* -------------------- PREVIEW IMAGES -------------------- */
     let imageData = [];
 
-    if (req.files?.images?.length) {
+    if (req.files?.previewImages?.length) {
       imageData = await Promise.all(
-        req.files.images.map(
+        req.files.previewImages.map(
           (file) =>
             new Promise((resolve, reject) => {
               const stream = cloudinary.uploader.upload_stream(
@@ -105,12 +106,12 @@ export const createAssest = async (req, res) => {
       stream.end(downloadFile.buffer);
     });
 
-    const assest = await Assests.create({
+    const asset = await Assets.create({
       title,
       description,
       included,
       category,
-      image: imageData,
+      previewImages: imageData,
       downloadFile: downloadFileData,
       price,
       originalPrice,
@@ -119,7 +120,7 @@ export const createAssest = async (req, res) => {
       rating,
     });
 
-    return res.status(201).json(assest);
+    return res.status(201).json(asset);
   } catch (error) {
     /* -------------------- ROLLBACK -------------------- */
     try {
@@ -131,9 +132,7 @@ export const createAssest = async (req, res) => {
 
       if (uploadedImagePublicIds.length) {
         await Promise.all(
-          uploadedImagePublicIds.map((id) =>
-            cloudinary.uploader.destroy(id),
-          ),
+          uploadedImagePublicIds.map((id) => cloudinary.uploader.destroy(id)),
         );
       }
     } catch {}
@@ -142,16 +141,15 @@ export const createAssest = async (req, res) => {
   }
 };
 
-
-export const updateAssest = async (req, res) => {
+export const updateAsset = async (req, res) => {
   const uploadedImageIds = [];
   let uploadedDownloadId = null;
 
   try {
     const { id } = req.params;
 
-    const assest = await Assests.findById(id);
-    if (!assest) {
+    const asset = await Assets.findById(id);
+    if (!asset) {
       return res.status(404).json({ error: "Asset not found" });
     }
 
@@ -171,20 +169,22 @@ export const updateAssest = async (req, res) => {
 
     allowedFields.forEach((field) => {
       if (req.body[field] !== undefined) {
-        assest[field] = req.body[field];
+        asset[field] = req.body[field];
       }
     });
 
     /* ---------- UPDATE PREVIEW IMAGES ---------- */
-    if (req.files?.images?.length) {
-      await Promise.all(
-        assest.image.map((img) =>
-          cloudinary.uploader.destroy(img.public_id),
-        ),
-      );
+    if (req.files?.previewImages?.length) {
+      if (asset.previewImages && asset.previewImages.length > 0) {
+        await Promise.all(
+          asset.previewImages.map((img) =>
+            cloudinary.uploader.destroy(img.public_id),
+          ),
+        );
+      }
 
       const newImages = await Promise.all(
-        req.files.images.map(
+        req.files.previewImages.map(
           (file) =>
             new Promise((resolve, reject) => {
               const stream = cloudinary.uploader.upload_stream(
@@ -205,7 +205,7 @@ export const updateAssest = async (req, res) => {
         ),
       );
 
-      assest.image = newImages;
+      asset.previewImages = newImages;
     }
 
     /* ---------- UPDATE DOWNLOAD ZIP ---------- */
@@ -216,11 +216,10 @@ export const updateAssest = async (req, res) => {
         throw new Error("Only ZIP files allowed");
       }
 
-      if (assest.downloadFile?.public_id) {
-        await cloudinary.uploader.destroy(
-          assest.downloadFile.public_id,
-          { resource_type: "raw" },
-        );
+      if (asset.downloadFile?.public_id) {
+        await cloudinary.uploader.destroy(asset.downloadFile.public_id, {
+          resource_type: "raw",
+        });
       }
 
       const newDownloadFile = await new Promise((resolve, reject) => {
@@ -245,11 +244,11 @@ export const updateAssest = async (req, res) => {
         stream.end(file.buffer);
       });
 
-      assest.downloadFile = newDownloadFile;
+      asset.downloadFile = newDownloadFile;
     }
 
-    await assest.save();
-    return res.status(200).json(assest);
+    await asset.save();
+    return res.status(200).json(asset);
   } catch (error) {
     /* ---------- ROLLBACK ---------- */
     try {
@@ -260,9 +259,7 @@ export const updateAssest = async (req, res) => {
       }
       if (uploadedImageIds.length) {
         await Promise.all(
-          uploadedImageIds.map((id) =>
-            cloudinary.uploader.destroy(id),
-          ),
+          uploadedImageIds.map((id) => cloudinary.uploader.destroy(id)),
         );
       }
     } catch {}

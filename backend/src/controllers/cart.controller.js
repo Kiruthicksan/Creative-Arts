@@ -1,5 +1,5 @@
 import mongoose, { Types } from "mongoose";
-import { Assests } from "../models/assests.schema.js";
+import { Assets } from "../models/assets.schema.js";
 import Cart from "../models/cart.schema.js";
 
 export const addToCart = async (req, res) => {
@@ -19,7 +19,7 @@ export const addToCart = async (req, res) => {
     }
 
     // ---------- FIND ASSET ----------
-    const asset = await Assests.findById(assetId).lean();
+    const asset = await Assets.findById(assetId).lean();
     if (!asset) {
       return res.status(404).json({ message: "Asset not found" });
     }

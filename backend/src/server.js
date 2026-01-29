@@ -6,7 +6,7 @@ import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import assestsRoutes from "./routes/assests.routes.js";
+import assetsRoutes from "./routes/assets.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 const app = express();
@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/assets", assestsRoutes);
+app.use("/api/assets", assetsRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/cart", cartRoutes);
 
