@@ -1,10 +1,10 @@
 import { Star } from "lucide-react";
-import ProductCard from "./ProductCard";
-import { productsData } from "../../data/mockData";
+import ProductCard from "../ProductCard";
+import useAssetsStore from "../../../store/useAssetsStore";
 
 const FeaturedProducts = () => {
-
-  const featuredProducts = productsData.slice(0, 4);
+  const { assets } = useAssetsStore();
+  const featuredProducts = assets.slice(0, 4);
   return (
     <div className="bg-gray-50">
       <div className="max-w-6xl mx-auto mb-20 px-4 py-20">
@@ -17,7 +17,11 @@ const FeaturedProducts = () => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-10">
           {featuredProducts.map((product) => (
-            <ProductCard key={product.id} {...product} />
+            <ProductCard
+              key={product._id}
+              {...product}
+              image={product?.previewImages?.[3]?.secure_url}
+            />
           ))}
         </div>
       </div>

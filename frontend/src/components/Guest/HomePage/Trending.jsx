@@ -1,10 +1,10 @@
 import { TrendingUp } from "lucide-react";
-import ProductCard from "./ProductCard";
-import { productsData } from "../../data/mockData";
+import ProductCard from "../ProductCard";
+import useAssetsStore from "../../../store/useAssetsStore";
 
 const Trending = () => {
-
-  const trendingData = [...productsData].reverse();
+  const { assets } = useAssetsStore();
+  const trendingData = [...assets].reverse();
 
   const trendingProducts = trendingData.slice(0, 4);
 
@@ -17,7 +17,11 @@ const Trending = () => {
       <h2 className="text-2xl font-bold mb-4">Trending This Week</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {trendingProducts.map((product) => (
-          <ProductCard key={product.id} {...product} />
+          <ProductCard
+            key={product._id}
+            {...product}
+            image={product?.previewImages?.[3]?.secure_url}
+          />
         ))}
       </div>
     </div>

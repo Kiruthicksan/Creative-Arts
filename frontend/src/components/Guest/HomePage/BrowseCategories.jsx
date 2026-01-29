@@ -1,4 +1,4 @@
-import BrowsCategoriesCard from "../BrowsCategoriesCard";
+
 import graphicDesign from "../../../assets/GraphicDesign.svg";
 import illustrations from "../../../assets/Illustrations.svg";
 import digitalArt from "../../../assets/Posters.svg";
@@ -6,6 +6,7 @@ import ebooks from "../../../assets/ShortNovels.svg";
 import templates from "../../../assets/Templates.svg";
 import uiKits from "../../../assets/ConceptArt.svg";
 import useAssetsStore from "../../../store/useAssetsStore";
+import BrowsCategoriesCard from "./BrowsCategoriesCard";
 
 const BrowseCategories = () => {
   const { assets } = useAssetsStore();
