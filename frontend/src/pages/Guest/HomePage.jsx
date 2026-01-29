@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
-import HeroSection from "../../components/Guest/HeroSection";
-import BrowseCategories from "../../components/Guest/BrowseCategories";
 import FeaturedProducts from "../../components/Guest/FeaturedProducts";
 import Trending from "../../components/Guest/Trending";
 import WhyChooseUs from "../../components/Guest/WhyChooseUs";
-import Footer from "../../components/public/Footer";
+import HeroSection from "../../components/Guest/HomePage/HeroSection";
+import BrowseCategories from "../../components/Guest/HomePage/BrowseCategories";
 
 const HomePage = () => {
   const { user, isAuthenticated, isLoading } = useAuthStore();

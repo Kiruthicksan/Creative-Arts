@@ -1,54 +1,62 @@
-import BrowsCategoriesCard from "./BrowsCategoriesCard";
-import graphicDesign from "../../assets/graphicDesign.svg";
-import illustrations from "../../assets/Illustrator.svg";
-import digitalArt from "../../assets/DigitalArt.svg";
-import ebooks from "../../assets/ebook.svg";
-import templates from "../../assets/templates.svg";
-import uiKits from "../../assets/UiKits.svg";
+import BrowsCategoriesCard from "../BrowsCategoriesCard";
+import graphicDesign from "../../../assets/GraphicDesign.svg";
+import illustrations from "../../../assets/Illustrations.svg";
+import digitalArt from "../../../assets/Posters.svg";
+import ebooks from "../../../assets/ShortNovels.svg";
+import templates from "../../../assets/Templates.svg";
+import uiKits from "../../../assets/ConceptArt.svg";
+import useAssetsStore from "../../../store/useAssetsStore";
 
 const BrowseCategories = () => {
+  const { assets } = useAssetsStore();
   const categories = [
     {
       name: "Graphic Design",
-      count: 1240,
+      count: assets.filter((asset) => asset.category === "Graphic Design").length + 1240,
       color: "#F3E8FF", // Light Purple
       iconColor: "#A855F7", // Purple
       image: graphicDesign,
+      path: "/graphics",
     },
     {
-      name: "UI Kits",
-      count: 856,
+      name: "Concept Art",
+      count: assets.filter((asset) => asset.category === "Concept Art").length + 856,
       color: "#FCE7F3", // Light Pink
       iconColor: "#EC4899", // Pink
       image: uiKits,
+      path: "/concept-art",
     },
     {
       name: "Illustrations",
-      count: 2100,
+      count: assets.filter((asset) => asset.category === "Illustrations").length + 2100,
       color: "#EFF6FF", // Light Blue
       iconColor: "#3B82F6", // Blue
       image: illustrations,
+      path: "/illustrations",
     },
     {
-      name: "Digital Art",
-      count: 1890,
+      name: "Posters",
+      count: assets.filter((asset) => asset.category === "Posters").length + 1890,
       color: "#FFF7ED", // Light Orange
       iconColor: "#F97316", // Orange
       image: digitalArt,
+      path: "/posters",
     },
     {
-      name: "eBooks & Stories",
-      count: 720,
+      name: "Short Novels",
+      count: assets.filter((asset) => asset.category === "Short Novels").length + 720,
       color: "#ECFDF5", // Light Green
       iconColor: "#10B981", // Green
       image: ebooks,
+      path: "/ebooks",
     },
     {
-      name: "Templates",
-      count: 1450,
+      name: "Others",
+      count: assets.filter((asset) => asset.category === "Others").length + 1450,
       color: "#EEF2FF", // Light Indigo
       iconColor: "#6366F1", // Indigo
       image: templates,
+      path: "/others",
     },
   ];
 
@@ -68,6 +76,7 @@ const BrowseCategories = () => {
             color={category.color}
             iconColor={category.iconColor}
             image={category.image}
+            path={category.path}
           />
         ))}
       </div>

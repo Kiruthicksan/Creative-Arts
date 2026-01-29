@@ -1,17 +1,15 @@
-
-
 import { useParams } from "react-router-dom";
 
 import { useState } from "react";
 
 import ProductDetailsSection from "../../components/Guest/ProductDetailsSection";
 import ProductDescriptionAndReviews from "../../components/Guest/ProductDescriptionAndReviews";
-import useAssestsStore from "../../store/useAssestsStore";
+import useAssestsStore from "../../store/useAssetsStore";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
 
-  const {assests} = useAssestsStore()
+  const { assests } = useAssestsStore();
 
   const product = assests.find((product) => product._id === id);
 
@@ -28,12 +26,13 @@ const ProductDetailsPage = () => {
   return (
     <div className=" max-w-7xl mx-auto  p-8 space-y-14">
       <ProductDetailsSection product={product} />
-      <ProductDescriptionAndReviews product={product} activeTab={activeTab} setActiveTab={setActiveTab} />
-     
+      <ProductDescriptionAndReviews
+        product={product}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 };
-
-
 
 export default ProductDetailsPage;

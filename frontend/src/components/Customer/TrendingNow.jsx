@@ -1,13 +1,9 @@
-
 import ProductCard from "../Guest/ProductCard";
-import useAssestsStore from "../../store/useAssestsStore";
+import useAssetsStore from "../../store/useAssetsStore";
 
 const TrendingNow = () => {
-
-  const { assests , loading} = useAssestsStore();
-  const trendingProducts = assests.slice(0, 4);
-
- 
+  const { assets, loading } = useAssetsStore();
+  const trendingProducts = assets.slice(0, 4);
 
   return (
     <div className="mb-20">
@@ -25,9 +21,13 @@ const TrendingNow = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {trendingProducts.map((product) => (
-          <ProductCard key={product._id} {...product} image={product.previewImages?.[0]?.secure_url} id={product._id}/>
+          <ProductCard
+            key={product._id}
+            {...product}
+            image={product.previewImages?.[0]?.secure_url}
+            id={product._id}
+          />
         ))}
-
       </div>
     </div>
   );

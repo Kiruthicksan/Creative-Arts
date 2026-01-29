@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import useAssestsStore from "../../store/useAssestsStore";
+
 import BrowseHeader from "../../components/Guest/BrowsePage/BrowseHeader";
 import {
   categories,
@@ -14,6 +14,7 @@ import SortDropDown from "../../components/Guest/BrowsePage/SortDropDown";
 import ProductGrid from "../../components/Guest/BrowsePage/ProductGrid";
 import EmptyState from "../../components/Guest/BrowsePage/EmptyState";
 import LoadMoreButton from "../../components/Guest/BrowsePage/LoadMoreButton";
+import useAssetsStore from "../../store/useAssetsStore";
 
 const BrowsePage = ({ category }) => {
   // States to manage the options.
@@ -34,11 +35,11 @@ const BrowsePage = ({ category }) => {
   }, [category]);
 
   // Store.
-  const { assests } = useAssestsStore();
+  const { assets } = useAssetsStore();
 
   // Used custom hook to seprate logic to filter products.
   const { sortedProducts, displayedProducts } = useBrowseProducts({
-    products: assests,
+    products: assets,
     searchQuery,
     selectedCategory,
     selectedFilters,

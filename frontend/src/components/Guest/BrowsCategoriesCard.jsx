@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-const BrowsCategoriesCard = ({ name, count, color, iconColor, image }) => {
+import { useNavigate } from "react-router-dom";
+const BrowsCategoriesCard = ({ name, count, color, iconColor, image, path }) => {
+  const navigate = useNavigate();
   return (
     <motion.div
       whileHover={{ scale: 1.05, backgroundColor: color }}
       transition={{ duration: 0.3 }}
       className="bg-white rounded-2xl p-6 shadow-sm border border-gray-300 cursor-pointer flex flex-col items-start gap-4 h-full group"
+      onClick={() => navigate(path)}
     >
       <div
         className="w-14 h-14 rounded-xl flex items-center justify-center mb-2 shadow-sm"

@@ -1,16 +1,16 @@
 import { create } from "zustand";
 import API from "../services/api";
 
-const useAssestsStore = create((set) => ({
-  assests: [],
+const useAssetsStore = create((set) => ({
+  assets: [],
   loading: false,
   error: null,
 
-  getAssests: async () => {
+  getAssets: async () => {
     try {
       set({ loading: true });
       const response = await API.get("/assets");
-      set({ assests: response.data });
+      set({ assets: response.data });
     } catch (error) {
       set({ error: error.message });
     } finally {
@@ -31,4 +31,4 @@ const useAssestsStore = create((set) => ({
   }
 }));
 
-export default useAssestsStore;
+export default useAssetsStore;
