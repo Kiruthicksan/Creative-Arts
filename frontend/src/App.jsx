@@ -16,6 +16,8 @@ import useAssestsStore from "./store/useAssestsStore";
 import useCartStore from "./store/useCartStore";
 import { Toaster } from "react-hot-toast";
 import CartPage from "./pages/Customer/CartPage";
+import PaymentPage from "./pages/Customer/PaymentPage";
+import ConfirmationPage from "./pages/Customer/ConfirmationPage";
 
 const App = () => {
   const { profile } = useAuthStore();
@@ -62,6 +64,8 @@ const App = () => {
           <Route element={<CustomerLayout />}>
             <Route path="/customer-dashboard" element={<CustomerDashboard />} />
              <Route path="/cart" element={<CartPage />} />
+             <Route path="/payment" element = {<PaymentPage />} />
+             <Route path="confirmation-page" element = {<ConfirmationPage />} />
           </Route>
         </Route>
 

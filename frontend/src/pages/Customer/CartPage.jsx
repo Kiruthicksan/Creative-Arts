@@ -11,10 +11,12 @@ import {
   Plus,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CartPage = () => {
   const { cart, removeFromCart, updateQuantity } = useCartStore();
+
+  const navigate = useNavigate()
 
   if (cart.items.length === 0) {
     return (
@@ -59,83 +61,12 @@ const CartPage = () => {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="divide-y divide-gray-100">
                 {cart.items.map((item) => (
-                  <div key={item._id} className="p-6 flex gap-6 group">
-                    {/* Product Image */}
-                    <div className="w-24 h-24 sm:w-32 sm:h-32 shrink-0 bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
-                      <img
-                        src={item.asset?.previewImages?.[0]?.secure_url}
-                        alt={item.asset?.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 flex flex-col sm:flex-row justify-between">
-                      <div className="flex flex-col gap-1">
-                        <h3 className="font-bold text-gray-900 text-lg leading-tight">
-                          {item.asset?.title}
-                        </h3>
-                        <p className="text-sm text-gray-500 font-medium">
-                          by{" "}
-                          <span className="text-gray-700">
-                            {item.asset?.author}
-                          </span>
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          Digital download - Instant access
-                        </p>
-
-                        {/* Quantity Selector */}
-                        <div className="mt-4 flex items-center gap-3">
-                          <span className="text-sm text-gray-500 font-medium">
-                            Qty:
-                          </span>
-                          <div className="flex items-center border border-gray-200 rounded-lg bg-gray-50">
-                            <button
-                              onClick={() =>
-                                updateQuantity(
-                                  item.asset._id,
-                                  Math.max(1, item.quantity - 1),
-                                )
-                              }
-                              disabled={item.quantity <= 1}
-                              className="p-1.5 hover:bg-white hover:shadow-sm rounded-md transition-all text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              <Minus className="w-3.5 h-3.5" />
-                            </button>
-                            <span className="w-8 text-center text-sm font-semibold text-gray-900">
-                              {item.quantity}
-                            </span>
-                            <button
-                              onClick={() =>
-                                updateQuantity(
-                                  item.asset._id,
-                                  item.quantity + 1,
-                                )
-                              }
-                              className="p-1.5 hover:bg-white hover:shadow-sm rounded-md transition-all text-gray-600"
-                            >
-                              <Plus className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Actions & Price */}
-                      <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end mt-4 sm:mt-0">
-                        <button
-                          onClick={() => removeFromCart(item.asset._id)}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all text-sm flex items-center gap-1 group-hover:bg-gray-50"
-                          title="Remove from cart"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                        <span className="text-xl font-bold text-gray-900">
-                          ₹{item.asset?.price}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <CartItem
+                    key={item._id}
+                    item={item}
+                    updateQuantity={updateQuantity}
+                    removeFromCart={removeFromCart}
+                  />
                 ))}
               </div>
             </div>
@@ -178,7 +109,9 @@ const CartPage = () => {
               </div>
 
               {/* Checkout Button */}
-              <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-purple-200 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+              <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-purple-200 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+              onClick={() => navigate("/payment")}
+              >
                 Proceed to Checkout
                 <ArrowRight className="w-5 h-5" />
               </button>
@@ -207,6 +140,89 @@ const CartPage = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CartItem = ({ item, updateQuantity, removeFromCart }) => {
+  const [quantity, setQuantity] = React.useState(item.quantity);
+
+  React.useEffect(() => {
+    setQuantity(item.quantity);
+  }, [item.quantity]);
+
+  React.useEffect(() => {
+    if (quantity === item.quantity) return;
+
+    const timeoutId = setTimeout(() => {
+      updateQuantity(item.asset._id, quantity);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [quantity, item.asset._id]); // Intentionally omitting item.quantity and updateQuantity to prevent loops
+
+  return (
+    <div key={item._id} className="p-6 flex gap-6 group">
+      {/* Product Image */}
+      <div className="w-24 h-24 sm:w-32 sm:h-32 shrink-0 bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
+        <img
+          src={item.asset?.previewImages?.[0]?.secure_url}
+          alt={item.asset?.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 flex flex-col sm:flex-row justify-between">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-bold text-gray-900 text-lg leading-tight">
+            {item.asset?.title}
+          </h3>
+          <p className="text-sm text-gray-500 font-medium">
+            by <span className="text-gray-700">{item.asset?.author}</span>
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
+            Digital download - Instant access
+          </p>
+
+          {/* Quantity Selector */}
+          <div className="mt-4 flex items-center gap-3">
+            <span className="text-sm text-gray-500 font-medium">Qty:</span>
+            <div className="flex items-center border border-gray-200 rounded-lg bg-gray-50">
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                disabled={quantity <= 1}
+                className="p-1.5 hover:bg-white hover:shadow-sm rounded-md transition-all text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Minus className="w-3.5 h-3.5" />
+              </button>
+              <span className="w-8 text-center text-sm font-semibold text-gray-900">
+                {quantity}
+              </span>
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                className="p-1.5 hover:bg-white hover:shadow-sm rounded-md transition-all text-gray-600"
+              >
+                <Plus className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Actions & Price */}
+        <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end mt-4 sm:mt-0">
+          <button
+            onClick={() => removeFromCart(item.asset._id)}
+            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all text-sm flex items-center gap-1 group-hover:bg-gray-50"
+            title="Remove from cart"
+          >
+            <Trash2 className="w-5 h-5" />
+          </button>
+          <span className="text-xl font-bold text-gray-900">
+            ₹{item.asset?.price}
+          </span>
         </div>
       </div>
     </div>

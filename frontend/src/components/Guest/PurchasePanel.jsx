@@ -19,7 +19,7 @@ const PurchasePanel = ({ product }) => {
           onClick={handleClick}
         >
           <ShoppingCart className="w-5 h-5" />
-          {isInCart ? "In Cart" : "Add to Cart"}
+          {isInCart ? "In Cart" : loading ? "Adding..." : "Add to Cart"}
         </motion.button>
 
         <motion.button
