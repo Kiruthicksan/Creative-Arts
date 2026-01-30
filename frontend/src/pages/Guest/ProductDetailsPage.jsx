@@ -1,21 +1,31 @@
 import { useParams } from "react-router-dom";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ProductDetailsSection from "../../components/Guest/ProductDetailsSection";
 import ProductDescriptionAndReviews from "../../components/Guest/ProductDescriptionAndReviews";
-import useAssestsStore from "../../store/useAssetsStore";
+import useAssetsStore from "../../store/useAssetsStore";
+import { Loader } from "lucide-react";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
 
-  const { assests } = useAssestsStore();
-
-  const product = assests.find((product) => product._id === id);
+  const { asset, getAssetsById, loading } = useAssetsStore();
+  console.log(asset);
+  useEffect(() => {
+    getAssetsById(id);
+  }, [id]);
 
   const [activeTab, setActiveTab] = useState("description");
 
-  if (!product) {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader className="animate-spin text-purple-600 w-8 h-8" />
+      </div>
+    );
+  }
+  if (!asset) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-xl text-gray-500">Product not found</p>
@@ -25,9 +35,9 @@ const ProductDetailsPage = () => {
 
   return (
     <div className=" max-w-7xl mx-auto  p-8 space-y-14">
-      <ProductDetailsSection product={product} />
+      <ProductDetailsSection product={asset} />
       <ProductDescriptionAndReviews
-        product={product}
+        product={asset}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />

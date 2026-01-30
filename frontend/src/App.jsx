@@ -1,6 +1,7 @@
 import { 
   createBrowserRouter, 
   createRoutesFromElements, 
+  Outlet, 
   Route, 
   RouterProvider 
 } from "react-router-dom";
@@ -35,7 +36,7 @@ import { ScrollRestoration } from "react-router-dom";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route>
+    <Route path="/" element = {<>{<ScrollRestoration />}<Outlet /></>}>
       {/* Public Routes */}
       <Route path="/login" element={<LoginPage />} />
 
@@ -88,7 +89,6 @@ const App = () => {
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <RouterProvider router={router}>
-        
         <ScrollRestoration />
       </RouterProvider>
     </>

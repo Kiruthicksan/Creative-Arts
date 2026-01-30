@@ -1,5 +1,5 @@
-import ProductCard from "../Guest/ProductCard";
-import useAssetsStore from "../../store/useAssetsStore";
+import ProductCard from "../../Guest/ProductCard";
+import useAssetsStore from "../../../store/useAssetsStore";
 
 const TrendingNow = () => {
   const { assets, loading } = useAssetsStore();

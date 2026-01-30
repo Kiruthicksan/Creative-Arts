@@ -1,26 +1,12 @@
-import { productsData } from "../../data/mockData";
+import { productsData } from "../../../data/mockData";
 import { Clock, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import useAssetsStore from "../../../store/useAssetsStore";
 
 const JumpBackIn = () => {
   const navigate = useNavigate();
-  const recentItems = [
-    {
-      ...productsData[4],
-      type: "Illustration",
-      action: "Viewed 2h ago",
-    },
-    {
-      ...productsData[5],
-      type: "Poster",
-      action: "Added to Cart",
-    },
-    {
-      ...productsData[6],
-      type: "Template",
-      action: "You liked this",
-    },
-  ];
+
+  const { assets } = useAssetsStore();
 
   return (
     <div className="mb-12">
@@ -30,15 +16,16 @@ const JumpBackIn = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {recentItems.map((item) => (
+        {assets.slice(0, 3).map((item) => (
           <div
             key={item.id}
-            className="group flex items-center gap-4 bg-white border border-gray-100 p-3 rounded-2xl hover:shadow-md transition-all cursor-pointer" onClick={() => navigate(`/product/${item.id}`)}
+            className="group flex items-center gap-4 bg-white border border-gray-100 p-3 rounded-2xl hover:shadow-md transition-all cursor-pointer"
+            onClick={() => navigate(`/product/${item._id}`)}
           >
             {/* Thumbnail */}
             <div className="h-16 w-16 rounded-xl overflow-hidden shrink-0">
               <img
-                src={item.image}
+                src={item.previewImages[0].secure_url}
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
@@ -47,12 +34,12 @@ const JumpBackIn = () => {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <p className="text-xs text-purple-600 font-medium mb-0.5">
-                {item.type}
+                {item.category}
               </p>
               <h3 className="font-bold text-gray-900 text-sm truncate">
                 {item.title}
               </h3>
-              <p className="text-xs text-gray-400 mt-1">{item.action}</p>
+              <p className="text-xs text-gray-400 mt-1">{item.createdAt}</p>
             </div>
 
             {/* Action Arrow */}

@@ -1,6 +1,6 @@
 import { Timer, ArrowRight, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
-import ArtNature from "../../assets/ArtNature.jpeg";
+import ArtNature from "../../../assets/ArtNature.jpeg";
 
 const FlashDeal = () => {
   const [timeLeft, setTimeLeft] = useState({

@@ -1,4 +1,9 @@
+import ArtNature from "../../../assets/ArtNature.jpeg";
+import LightAndDark from "../../../assets/LightAndDark.jpeg";
+import { useNavigate } from "react-router-dom";
+
 const FreshArrivals = () => {
+  const navigate = useNavigate();
   return (
     <div className="mb-20 py-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 px-1">
@@ -8,14 +13,20 @@ const FreshArrivals = () => {
             Explore our latest high-quality additions
           </p>
         </div>
-        <button className="hidden md:block text-purple-600 font-semibold text-sm hover:text-purple-700 hover:underline">
+        <button
+          className="hidden md:block text-purple-600 font-semibold text-sm hover:text-purple-700 hover:underline"
+          onClick={() => navigate("/browse")}
+        >
           View All New Items →
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Card 1: Illustrations */}
-        <div className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer">
+        <div
+          className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer"
+          onClick={() => navigate("/illustrations")}
+        >
           <img
             src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800"
             alt="Illustrations"
@@ -39,9 +50,12 @@ const FreshArrivals = () => {
         </div>
 
         {/* Card 2: Posters */}
-        <div className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer">
+        <div
+          className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer"
+          onClick={() => navigate("/posters")}
+        >
           <img
-            src="https://images.unsplash.com/photo-1572099606223-6e29045d7de3?auto=format&fit=crop&q=80&w=800"
+            src={ArtNature}
             alt="Posters"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
@@ -61,9 +75,12 @@ const FreshArrivals = () => {
         </div>
 
         {/* Card 3: Graphic Design */}
-        <div className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer">
+        <div
+          className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer"
+          onClick={() => navigate("/graphics")}
+        >
           <img
-            src="https://images.unsplash.com/photo-1626785774573-4b7993125637?auto=format&fit=crop&q=80&w=800"
+            src={LightAndDark}
             alt="Graphic Design"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
@@ -85,7 +102,10 @@ const FreshArrivals = () => {
         </div>
 
         {/* Card 4: Short Novels */}
-        <div className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer">
+        <div
+          className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer"
+          onClick={() => navigate("/ebooks")}
+        >
           <img
             src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800"
             alt="Short Novels"

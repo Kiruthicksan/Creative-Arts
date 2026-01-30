@@ -1,8 +1,15 @@
-
-import useAuthStore from "../../store/useAuthStore";
+import useAuthStore from "../../../store/useAuthStore";
+import creativeQuotes from "../../../data/Quotes";
+import { useMemo } from "react";
 
 const Header = () => {
   const { user } = useAuthStore();
+
+  const randomQuote = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * creativeQuotes.length);
+    return creativeQuotes[randomIndex];
+  }, []);
+
   return (
     <div className="py-10">
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -10,8 +17,8 @@ const Header = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
             Welcome back,{" "}
             <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
-              {user?.userName.charAt(0).toUpperCase() + user?.userName.slice(1).toLowerCase()
-              }
+              {user?.userName.charAt(0).toUpperCase() +
+                user?.userName.slice(1).toLowerCase()}
             </span>
             👋
           </h1>
@@ -24,10 +31,10 @@ const Header = () => {
           <div className="w-1 h-12 bg-purple-400 rounded-full shrink-0"></div>
           <div>
             <p className="text-gray-700 italic font-medium text-sm">
-              "Creativity is intelligence having fun."
+              "{randomQuote.quote}"
             </p>
             <p className="text-purple-600 text-xs font-bold mt-1">
-              – Albert Einstein
+              – {randomQuote.author}
             </p>
           </div>
         </div>

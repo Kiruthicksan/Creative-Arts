@@ -16,7 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 const CartPage = () => {
   const { cart, removeFromCart, updateQuantity } = useCartStore();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   if (cart.items.length === 0) {
     return (
@@ -109,8 +109,9 @@ const CartPage = () => {
               </div>
 
               {/* Checkout Button */}
-              <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-purple-200 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
-              onClick={() => navigate("/payment")}
+              <button
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-purple-200 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                onClick={() => navigate("/payment")}
               >
                 Proceed to Checkout
                 <ArrowRight className="w-5 h-5" />

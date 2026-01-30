@@ -3,6 +3,7 @@ import API from "../services/api";
 
 const useAssetsStore = create((set) => ({
   assets: [],
+  asset: null,
   loading: false,
   error: null,
 
@@ -18,8 +19,11 @@ const useAssetsStore = create((set) => ({
     }
   },
 
-  getAssetsById : async (id) => {
-    try { 
+  getAssetsById: async (id) => {
+    if (!id || id === "undefined") {
+      return set({ error: "Invalid Product ID", loading: false });
+    }
+    try {
       set({ loading: true });
       const response = await API.get(`/assets/${id}`);
       set({ asset: response.data });
@@ -28,7 +32,7 @@ const useAssetsStore = create((set) => ({
     } finally {
       set({ loading: false });
     }
-  }
+  },
 }));
 
 export default useAssetsStore;

@@ -110,17 +110,21 @@ const Navbar = () => {
 
             {/* Icons */}
             <div className="flex items-center gap-4">
-              <button className="text-gray-600 hover:text-purple-600 transition-colors relative group">
-                <Heart className="w-5 h-5" />
-              </button>
-              <button className="text-gray-600 hover:text-purple-600 transition-colors relative">
-                <Link to="/cart">
-                  <ShoppingCart className="w-5 h-5" />
-                  <span className="absolute -top-1.5 -right-1.5 bg-purple-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
-                    {cart?.items?.length}
-                  </span>
-                </Link>
-              </button>
+              {user && (
+                <>
+                  <button className="text-gray-600 hover:text-purple-600 transition-colors relative group">
+                    <Heart className="w-5 h-5" />
+                  </button>
+                  <button className="text-gray-600 hover:text-purple-600 transition-colors relative">
+                    <Link to="/cart">
+                      <ShoppingCart className="w-5 h-5" />
+                      <span className="absolute -top-1.5 -right-1.5 bg-purple-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
+                        {cart?.items?.length}
+                      </span>
+                    </Link>
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Auth Buttons */}

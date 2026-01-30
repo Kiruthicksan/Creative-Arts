@@ -20,7 +20,8 @@ const Trending = () => {
           <ProductCard
             key={product._id}
             {...product}
-            image={product?.previewImages?.[3]?.secure_url}
+            image={product?.previewImages?.[0]?.secure_url || ""}
+            id={product._id}
           />
         ))}
       </div>
