@@ -14,6 +14,9 @@ export const getAssets = async (req, res) => {
 export const getAssetsById = async (req, res) => {
   try {
     const asset = await Assets.findById(req.params.id);
+    if (!asset) {
+      res.json({ message: "Asset Not found" });
+    }
     res.status(200).json(asset);
   } catch (error) {
     res.status(500).json({ error: error.message });
