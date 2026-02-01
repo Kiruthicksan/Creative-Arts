@@ -25,6 +25,7 @@ import PaymentPage from "./pages/Customer/PaymentPage";
 import ConfirmationPage from "./pages/Customer/ConfirmationPage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ProductsPage from "./pages/Admin/ProductsPage";
+import ProfilePage from "./pages/Customer/ProfilePage";
 
 // Stores
 import useAuthStore from "./store/useAuthStore";
@@ -33,6 +34,7 @@ import useAssetsStore from "./store/useAssetsStore";
 
 // The ScrollRestoration component only works inside a Data Router
 import { ScrollRestoration } from "react-router-dom";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -60,6 +62,7 @@ const router = createBrowserRouter(
           <Route path="cart" element={<CartPage />} />
           <Route path="payment" element={<PaymentPage />} />
           <Route path="confirmation-page" element={<ConfirmationPage />} />
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
       </Route>
 

@@ -33,7 +33,7 @@ const useCartStore = create((set, get) => ({
   },
   isInCart: (assetId) => {
     return get().cart.items.some(
-      (item) => item.asset === assetId,
+      (item) => item.asset === assetId || item.asset._id === assetId,
     );
   },
   removeFromCart: async (assetId) => {

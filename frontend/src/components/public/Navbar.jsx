@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Heart,
   Search,
@@ -26,10 +26,12 @@ const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const menuRef = useRef(null);
 
+  const navigate = useNavigate();
+
   // local state for managing mobile menu
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
 
   // cart state
   const { cart } = useCartStore();
@@ -139,21 +141,13 @@ const Navbar = () => {
                   </button>
                   {profileOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-2xl border border-gray-100 py-1 z-50">
-                      <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                      <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors" onClick={() => navigate("/profile")}>
                         Profile
                       </button>
                       <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
                         My Library
                       </button>
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
-                        onClick={() => {
-                          logout();
-                          setProfileOpen(false);
-                        }}
-                      >
-                        Logout
-                      </button>
+                      
                     </div>
                   )}
                 </div>
@@ -296,15 +290,7 @@ const Navbar = () => {
                             My Library
                           </span>
                         </button>
-                        <button
-                          onClick={() => {
-                            logout();
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-3 rounded-xl hover:bg-red-50 text-red-600 font-medium flex items-center gap-3 transition-colors mt-2"
-                        >
-                          <LogOut className="w-4 h-4" /> Sign Out
-                        </button>
+                       
                       </div>
                     </div>
                   ) : (
