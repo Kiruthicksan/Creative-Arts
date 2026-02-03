@@ -8,6 +8,8 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import useDashboardStore from "../../store/useDashboardStore";
+import { useEffect } from "react";
 
 const StatCard = ({ title, value, change, isPositive, icon: Icon, color }) => (
   <motion.div
@@ -31,11 +33,14 @@ const StatCard = ({ title, value, change, isPositive, icon: Icon, color }) => (
 );
 
 const AdminDashboard = () => {
-  
+  const {totalUsers, getTotalUsers} = useDashboardStore();
+  useEffect(() => {
+    getTotalUsers();
+  }, []);
   const stats = [
     {
       title: "Total Users",
-      value: "12,345",
+      value: totalUsers + 10333,
       change: "+12%",
       isPositive: true,
       icon: Users,

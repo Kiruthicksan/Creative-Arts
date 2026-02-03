@@ -9,71 +9,16 @@ import {
   Eye,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import useAssetsStore from "../../store/useAssetsStore";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const products = [
-    {
-      id: 1,
-      name: "Abstract Modern 3D Art",
-      category: "Digital Art",
-      price: 120.0,
-      stock: 45,
-      status: "Active",
-      sales: 128,
-      image:
-        "https://images.unsplash.com/photo-1549490349-8643362247b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-    },
-    {
-      id: 2,
-      name: "Minimalist Poster Pack",
-      category: "Print",
-      price: 45.5,
-      stock: 120,
-      status: "Active",
-      sales: 852,
-      image:
-        "https://images.unsplash.com/photo-1579762715118-a6f1d4b934f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-    },
-    {
-      id: 3,
-      name: "Handcrafted Ceramics Set",
-      category: "Crafts",
-      price: 89.99,
-      stock: 0,
-      status: "Out of Stock",
-      sales: 64,
-      image:
-        "https://images.unsplash.com/photo-1610701596007-11502861dcfa?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-    },
-    {
-      id: 4,
-      name: "Oil Painting Texture Brushes",
-      category: "Tools",
-      price: 24.0,
-      stock: 999,
-      status: "Active",
-      sales: 2401,
-      image:
-        "https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-    },
-    {
-      id: 5,
-      name: "Urban Photography Collection",
-      category: "Photography",
-      price: 60.0,
-      stock: 15,
-      status: "Low Stock",
-      sales: 42,
-      image:
-        "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-    },
-  ];
+  const { assets } = useAssetsStore();
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name
+  const filteredProducts = assets?.filter((product) => {
+    const matchesSearch = product.title
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     const matchesCategory =
@@ -81,14 +26,7 @@ const ProductsPage = () => {
     return matchesSearch && matchesCategory;
   });
 
-  const categories = [
-    "All",
-    "Digital Art",
-    "Print",
-    "Crafts",
-    "Tools",
-    "Photography",
-  ];
+  const categories = assets?.map((asset) => asset.category);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -185,24 +123,24 @@ const ProductsPage = () => {
             <tbody className="divide-y divide-gray-50">
               {filteredProducts.map((product) => (
                 <tr
-                  key={product.id}
+                  key={product._id}
                   className="hover:bg-gray-50 transition-colors group"
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden">
                         <img
-                          src={product.image}
-                          alt={product.name}
+                          src={product.previewImages[0].secure_url}
+                          alt={product.title}
                           className="w-full h-full object-cover"
                         />
                       </div>
                       <div>
                         <h4 className="text-sm font-semibold text-gray-900">
-                          {product.name}
+                          {product.title}
                         </h4>
                         <p className="text-xs text-gray-500">
-                          ID: #{product.id}
+                          ID: #{product._id}
                         </p>
                       </div>
                     </div>
