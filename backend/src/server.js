@@ -9,6 +9,7 @@ import cors from "cors";
 import assetsRoutes from "./routes/assets.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 const app = express();
 
 app.use(express.json());
@@ -28,6 +29,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/assets", assetsRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 const server = async () => {
   try {
