@@ -61,9 +61,11 @@ const useCartStore = create((set, get) => ({
       toast.success("Quantity updated in cart");
     } catch (error) {
       console.log(error);
-    } finally {
       set({ loading: false });
     }
+  },
+  clearCart: () => {
+    set({ cart: { items: [], totalItems: 0, totalPrice: 0 } });
   },
 }));
 

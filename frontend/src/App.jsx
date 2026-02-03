@@ -34,6 +34,7 @@ import useAssetsStore from "./store/useAssetsStore";
 
 // The ScrollRestoration component only works inside a Data Router
 import { ScrollRestoration } from "react-router-dom";
+import Library from "./pages/Customer/Library";
 
 
 const router = createBrowserRouter(
@@ -63,6 +64,7 @@ const router = createBrowserRouter(
           <Route path="payment" element={<PaymentPage />} />
           <Route path="confirmation-page" element={<ConfirmationPage />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="library" element={<Library />} />
         </Route>
       </Route>
 
@@ -87,6 +89,8 @@ const App = () => {
     getAssets();
     getCart();
   }, []);
+
+ 
 
   return (
     <>

@@ -2,26 +2,26 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   CreditCard,
-  Calendar,
-  Lock,
   User,
   ShieldCheck,
   ArrowLeft,
   CheckCircle,
   AlertCircle,
+  Lock,
 } from "lucide-react";
 import useCartStore from "../../store/useCartStore";
+import useAuthStore from "../../store/useAuthStore";
+import API from "../../services/api";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const PaymentPage = () => {
-  const { cart } = useCartStore();
+  const { cart, clearCart } = useCartStore(); // Added clearCart destructuring
+  const { user } = useAuthStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    cardNumber: "",
     cardName: "",
-    expiry: "",
-    cvc: "",
   });
 
   const handleInputChange = (e) => {
@@ -29,14 +29,89 @@ const PaymentPage = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate payment processing
-    setTimeout(() => {
+
+    const res = await loadRazorpay();
+    if (!res) {
       setLoading(false);
-      navigate("/confirmation-page");
-    }, 2000);
+      toast.error("Razorpay SDK failed to load. Check your connection.");
+      return;
+    }
+
+    try {
+      // 1. Create Order on Backend
+      const { data } = await API.post("/orders/create");
+
+      if (!data.success) {
+        throw new Error("Failed to create order");
+      }
+
+      const options = {
+        key: data.key,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: "Creative Arts",
+        description: "Purchase of Digital Assets",
+        // image: "/logo.png", // Add logo if you have one
+        order_id: data.order.id,
+        handler: async function (response) {
+          try {
+            const verifyRes = await API.post("/orders/verify", {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verifyRes.data.success) {
+              clearCart(); // Clear local cart state
+              toast.success("Payment Successful!");
+              navigate("/confirmation-page");
+            } else {
+              toast.error("Payment verification failed.");
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error("Payment verification failed.");
+          }
+        },
+        prefill: {
+          name: user?.userName || formData.cardName || "User",
+          email: user?.email,
+          contact: "9999999999",
+        },
+        theme: {
+          color: "#9333ea", // Purple-600 matching the UI
+        },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+
+      paymentObject.on("payment.failed", function (response) {
+        toast.error(response.error.description);
+        setLoading(false);
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong initializing payment",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -80,7 +155,7 @@ const PaymentPage = () => {
 
               <div className="p-6 sm:p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Card Selection (Visual Only for now as requested) */}
+                  {/* Card Selection (Visual Only) */}
                   <div className="p-4 border-2 border-purple-500 bg-purple-50/50 rounded-xl flex items-center gap-4 cursor-pointer relative">
                     <div className="w-5 h-5 rounded-full border-[5px] border-purple-600 bg-white"></div>
                     <div className="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-purple-600 shadow-sm">
@@ -88,10 +163,10 @@ const PaymentPage = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900">
-                        Credit / Debit Card
+                        Razorpay Secure Checkout
                       </h3>
                       <p className="text-sm text-gray-500">
-                        Pay securely with your bank card
+                        Pay securely with UPI, Cards, Netbanking
                       </p>
                     </div>
                     <div className="absolute top-4 right-4">
@@ -99,76 +174,22 @@ const PaymentPage = () => {
                     </div>
                   </div>
 
-                  {/* Card Form */}
+                  {/* Card Form - Optional / Prefill */}
                   <div className="space-y-4 pt-2">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700 block">
-                        Card Number
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          name="cardNumber"
-                          placeholder="0000 0000 0000 0000"
-                          value={formData.cardNumber}
-                          onChange={handleInputChange}
-                          className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all font-mono"
-                        />
-                        <CreditCard className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-gray-700 block">
-                        Cardholder Name
+                        Name (Optional)
                       </label>
                       <div className="relative">
                         <input
                           type="text"
                           name="cardName"
-                          placeholder="Enter name as provided on card"
+                          placeholder="Your Name"
                           value={formData.cardName}
                           onChange={handleInputChange}
-                          className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                          className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all font-mono"
                         />
                         <User className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-700 block">
-                          Expiry Date
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            name="expiry"
-                            placeholder="MM / YY"
-                            value={formData.expiry}
-                            onChange={handleInputChange}
-                            className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all font-mono"
-                          />
-                          <Calendar className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-700 block">
-                          CVC / CVV
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            name="cvc"
-                            placeholder="123"
-                            maxLength={4}
-                            value={formData.cvc}
-                            onChange={handleInputChange}
-                            className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all font-mono"
-                          />
-                          <Lock className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -217,23 +238,23 @@ const PaymentPage = () => {
                     <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0">
                       <img
                         src={item.asset?.previewImages?.[0]?.secure_url}
-                        alt={item.asset.title}
+                        alt={item.asset?.title}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-gray-900 text-sm truncate">
-                        {item.asset.title}
+                        {item.asset?.title}
                       </h4>
                       <p className="text-xs text-gray-500 mb-1">
-                        {item.asset.author}
+                        {item.asset?.author}
                       </p>
                       <div className="flex justify-between items-center">
                         <span className="text-xs text-gray-500">
                           Qty: {item.quantity}
                         </span>
                         <span className="font-semibold text-sm text-gray-900">
-                          ₹{item.asset.price * item.quantity}
+                          ₹{item.asset?.price * item.quantity}
                         </span>
                       </div>
                     </div>
