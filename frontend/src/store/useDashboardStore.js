@@ -5,6 +5,10 @@ const useDashboardStore = create((set) => ({
   userGrowth: 0,
   totalRevenue: 0,
   revenueGrowth: 0,
+  totalOrders: 0,
+  totalOrdersGrowth: 0,
+  activeOrders: 0,
+  activeOrdersGrowth: 0,
 
   getTotalUsers: async () => {
     try {
@@ -14,6 +18,10 @@ const useDashboardStore = create((set) => ({
         userGrowth: response.data.data.userGrowth,
         totalRevenue: response.data.data.totalRevenue,
         revenueGrowth: response.data.data.revenueGrowth,
+        totalOrders: response.data.data.totalOrders,
+        totalOrdersGrowth: response.data.data.totalOrdersGrowth,
+        activeOrders: response.data.data.activeOrders,
+        activeOrdersGrowth: response.data.data.activeOrdersGrowth,
       });
     } catch (error) {
       console.log(error);

@@ -33,8 +33,17 @@ const StatCard = ({ title, value, change, isPositive, icon: Icon, color }) => (
 );
 
 const AdminDashboard = () => {
-  const { totalUsers, userGrowth, totalRevenue, revenueGrowth, getTotalUsers } =
-    useDashboardStore();
+  const {
+    totalUsers,
+    userGrowth,
+    totalRevenue,
+    revenueGrowth,
+    totalOrders,
+    totalOrdersGrowth,
+    activeOrders,
+    activeOrdersGrowth,
+    getTotalUsers,
+  } = useDashboardStore();
   useEffect(() => {
     getTotalUsers();
   }, []);
@@ -57,17 +66,17 @@ const AdminDashboard = () => {
     },
     {
       title: "Active Orders",
-      value: "573",
-      change: "-2.1%",
-      isPositive: false,
+      value: activeOrders,
+      change: `${activeOrdersGrowth > 0 ? "+" : ""}${activeOrdersGrowth}%`,
+      isPositive: activeOrdersGrowth >= 0,
       icon: ShoppingBag,
       color: "bg-purple-500 text-purple-600",
     },
     {
-      title: "Growth",
-      value: "24.8%",
-      change: "+4.3%",
-      isPositive: true,
+      title: "Total Orders",
+      value: totalOrders,
+      change: `${totalOrdersGrowth > 0 ? "+" : ""}${totalOrdersGrowth}%`,
+      isPositive: totalOrdersGrowth >= 0,
       icon: TrendingUp,
       color: "bg-orange-500 text-orange-600",
     },
