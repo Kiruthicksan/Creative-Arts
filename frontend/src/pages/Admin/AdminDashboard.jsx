@@ -33,24 +33,25 @@ const StatCard = ({ title, value, change, isPositive, icon: Icon, color }) => (
 );
 
 const AdminDashboard = () => {
-  const {totalUsers, getTotalUsers} = useDashboardStore();
+  const { totalUsers, userGrowth, totalRevenue, revenueGrowth, getTotalUsers } =
+    useDashboardStore();
   useEffect(() => {
     getTotalUsers();
   }, []);
   const stats = [
     {
       title: "Total Users",
-      value: totalUsers + 10333,
-      change: "+12%",
-      isPositive: true,
+      value: totalUsers,
+      change: `${userGrowth > 0 ? "+" : ""}${userGrowth}%`,
+      isPositive: userGrowth >= 0,
       icon: Users,
       color: "bg-blue-500 text-blue-600",
     },
     {
       title: "Total Sales",
-      value: "$45,231",
-      change: "+8.5%",
-      isPositive: true,
+      value: `₹${totalRevenue.toLocaleString()}`,
+      change: `${revenueGrowth > 0 ? "+" : ""}${revenueGrowth}%`,
+      isPositive: revenueGrowth >= 0,
       icon: DollarSign,
       color: "bg-green-500 text-green-600",
     },
