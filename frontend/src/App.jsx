@@ -35,6 +35,7 @@ import useAssetsStore from "./store/useAssetsStore";
 // The ScrollRestoration component only works inside a Data Router
 import { ScrollRestoration } from "react-router-dom";
 import Library from "./pages/Customer/Library";
+import Users from "./pages/Admin/Users";
 
 
 const router = createBrowserRouter(
@@ -73,6 +74,7 @@ const router = createBrowserRouter(
         <Route element={<AdminLayout />}>
           <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route path="admin-products" element={<ProductsPage />} />
+          <Route path="admin-users" element={<Users />} />
         </Route>
       </Route>
     </Route>
