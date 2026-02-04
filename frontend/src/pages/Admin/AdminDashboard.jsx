@@ -10,6 +10,15 @@ import {
 import { motion } from "framer-motion";
 import useDashboardStore from "../../store/useDashboardStore";
 import { useEffect } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const StatCard = ({ title, value, change, isPositive, icon: Icon, color }) => (
   <motion.div
@@ -42,11 +51,65 @@ const AdminDashboard = () => {
     totalOrdersGrowth,
     activeOrders,
     activeOrdersGrowth,
+    dailyStats,
     getTotalUsers,
   } = useDashboardStore();
   useEffect(() => {
     getTotalUsers();
   }, []);
+
+  const { recentUsers } = useDashboardStore();
+
+  const customers = recentUsers.filter((user) => user.role === "customer");
+
+  const handleDownload = () => {
+    const headers = ["Category", "Metric", "Value", "Growth"];
+    const summaryRows = [
+      ["Summary", "Total Users", totalUsers, `${userGrowth}%`],
+      ["Summary", "Total Revenue", totalRevenue, `${revenueGrowth}%`],
+      ["Summary", "Active Orders", activeOrders, `${activeOrdersGrowth}%`],
+      ["Summary", "Total Orders", totalOrders, `${totalOrdersGrowth}%`],
+    ];
+
+    const revenueHeaders = ["Date", "Revenue", "Orders"];
+    const revenueRows = dailyStats.map((stat) => [
+      stat._id,
+      stat.revenue,
+      stat.orders,
+    ]);
+
+    const userHeaders = ["User Name", "Email", "Role", "Joined Date"];
+    const userRows = recentUsers.map((u) => [
+      u.userName,
+      u.email,
+      u.role,
+      new Date(u.createdAt).toLocaleDateString(),
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...summaryRows.map((e) => e.join(",")),
+      "",
+      revenueHeaders.join(","),
+      ...revenueRows.map((e) => e.join(",")),
+      "",
+      userHeaders.join(","),
+      ...userRows.map((e) => e.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "admin_dashboard_report.csv");
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   const stats = [
     {
       title: "Total Users",
@@ -94,7 +157,10 @@ const AdminDashboard = () => {
             Welcome back, here's what's happening today.
           </p>
         </div>
-        <button className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+        <button
+          onClick={handleDownload}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200"
+        >
           Download Report
         </button>
       </div>
@@ -118,8 +184,55 @@ const AdminDashboard = () => {
               <MoreHorizontal />
             </button>
           </div>
-          <div className="w-full h-80 bg-gray-50 rounded-xl flex items-center justify-center border border-dashed border-gray-200 text-gray-400">
-            Chart Placeholder
+          <div className="w-full h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={dailyStats}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#4F46E5" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  stroke="#E5E7EB"
+                />
+                <XAxis
+                  dataKey="_id"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#6B7280", fontSize: 12 }}
+                  dy={10}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#6B7280", fontSize: 12 }}
+                  tickFormatter={(value) => `₹${value}`}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#fff",
+                    borderRadius: "12px",
+                    border: "none",
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                  }}
+                  formatter={(value) => [`₹${value}`, "Revenue"]}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#4F46E5"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  fill="url(#colorRevenue)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
@@ -132,19 +245,17 @@ const AdminDashboard = () => {
             </button>
           </div>
           <div className="space-y-4">
-            {[1, 2, 3, 4, 5].map((i) => (
+            {customers.map((user) => (
               <div
-                key={i}
+                key={user._id}
                 className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer"
               >
                 <div className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-semibold text-gray-900 truncate">
-                    User Name {i}
+                    {user.userName}
                   </h4>
-                  <p className="text-xs text-gray-500 truncate">
-                    user{i}@example.com
-                  </p>
+                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
                 </div>
                 <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
                   Active

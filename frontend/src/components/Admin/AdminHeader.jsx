@@ -1,6 +1,8 @@
 import { Bell, Search, Menu, ChevronDown, User } from "lucide-react";
+import useAuthStore from "../../store/useAuthStore";
 
 const AdminHeader = ({ toggleSidebar }) => {
+  const { user } = useAuthStore();
   return (
     <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-4">
       <div className="flex items-center justify-between gap-4">
@@ -36,9 +38,9 @@ const AdminHeader = ({ toggleSidebar }) => {
             </div>
             <div className="hidden sm:block text-left mr-1">
               <p className="text-sm font-semibold text-gray-700 group-hover:text-indigo-600 transition-colors">
-                Admin User
+                {user?.userName}
               </p>
-              <p className="text-xs text-gray-400">admin@creative.arts</p>
+              <p className="text-xs text-gray-400">{user?.email}</p>
             </div>
             <ChevronDown
               size={16}

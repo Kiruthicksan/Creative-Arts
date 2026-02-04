@@ -9,6 +9,8 @@ const useDashboardStore = create((set) => ({
   totalOrdersGrowth: 0,
   activeOrders: 0,
   activeOrdersGrowth: 0,
+  recentUsers: [],
+  dailyStats: [],
 
   getTotalUsers: async () => {
     try {
@@ -22,6 +24,8 @@ const useDashboardStore = create((set) => ({
         totalOrdersGrowth: response.data.data.totalOrdersGrowth,
         activeOrders: response.data.data.activeOrders,
         activeOrdersGrowth: response.data.data.activeOrdersGrowth,
+        recentUsers: response.data.data.recentUsers,
+        dailyStats: response.data.data.dailyStats,
       });
     } catch (error) {
       console.log(error);
