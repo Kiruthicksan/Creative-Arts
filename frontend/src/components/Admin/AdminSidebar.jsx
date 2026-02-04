@@ -18,7 +18,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     { icon: LayoutDashboard, label: "Dashboard", path: "/admin-dashboard" },
     { icon: Users, label: "Users", path: "/admin-users" },
     { icon: ShoppingBag, label: "Products", path: "/admin-products" },
-    { icon: Settings, label: "Settings", path: "/admin-settings" },
+    // { icon: Settings, label: "Settings", path: "/admin-settings" }, // Maybe added in future
   ];
 
   const {logout} = useAuthStore()

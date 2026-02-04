@@ -1,9 +1,9 @@
-import { 
-  createBrowserRouter, 
-  createRoutesFromElements, 
-  Outlet, 
-  Route, 
-  RouterProvider 
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Outlet,
+  Route,
+  RouterProvider,
 } from "react-router-dom";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
@@ -37,10 +37,17 @@ import { ScrollRestoration } from "react-router-dom";
 import Library from "./pages/Customer/Library";
 import Users from "./pages/Admin/Users";
 
-
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element = {<>{<ScrollRestoration />}<Outlet /></>}>
+    <Route
+      path="/"
+      element={
+        <>
+          {<ScrollRestoration />}
+          <Outlet />
+        </>
+      }
+    >
       {/* Public Routes */}
       <Route path="/login" element={<LoginPage />} />
 
@@ -49,11 +56,20 @@ const router = createBrowserRouter(
         <Route index element={<HomePage />} />
         <Route path="product/:id" element={<ProductDetailsPage />} />
         <Route path="browse" element={<BrowsePage />} />
-        <Route path="graphics" element={<BrowsePage category="Graphic Design" />} />
-        <Route path="illustrations" element={<BrowsePage category="Illustrations" />} />
+        <Route
+          path="graphics"
+          element={<BrowsePage category="Graphic Design" />}
+        />
+        <Route
+          path="illustrations"
+          element={<BrowsePage category="Illustrations" />}
+        />
         <Route path="ebooks" element={<BrowsePage category="Short Novels" />} />
         <Route path="posters" element={<BrowsePage category="Posters" />} />
-        <Route path="concept-art" element={<BrowsePage category="ConceptArt" />} />
+        <Route
+          path="concept-art"
+          element={<BrowsePage category="ConceptArt" />}
+        />
         <Route path="others" element={<BrowsePage category="Other" />} />
       </Route>
 
@@ -77,8 +93,8 @@ const router = createBrowserRouter(
           <Route path="admin-users" element={<Users />} />
         </Route>
       </Route>
-    </Route>
-  )
+    </Route>,
+  ),
 );
 
 const App = () => {
@@ -91,8 +107,6 @@ const App = () => {
     getAssets();
     getCart();
   }, []);
-
- 
 
   return (
     <>

@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import useUsersStore from "../../store/useUsersStore";
 import { Search, Trash2, Mail, User } from "lucide-react";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 const Users = () => {
-  const { users, fetchAllUsers } = useUsersStore();
+  const { users, fetchAllUsers, deleteUser } = useUsersStore();
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -12,8 +13,19 @@ const Users = () => {
     fetchAllUsers();
   }, [fetchAllUsers]);
 
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      const { success, error } = await deleteUser(id);
+      if (success) {
+        toast.success("User deleted successfully");
+      } else {
+        toast.error(error || "Failed to delete user");
+      }
+    }
+  };
+
   const fileterUsers = users.filter((user) =>
-    user.userName.toLowerCase().includes(searchQuery.toLowerCase())
+    user.userName.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -96,6 +108,7 @@ const Users = () => {
                   </td>
                   <td className="py-4 px-6 text-right">
                     <button
+                      onClick={() => handleDelete(user._id)}
                       className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete User"
                     >

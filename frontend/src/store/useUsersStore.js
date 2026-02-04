@@ -12,6 +12,19 @@ const useUsersStore = create((set) => ({
       console.log(error);
     }
   },
+
+  deleteUser: async (id) => {
+    try {
+      await API.delete(`/user/delete/${id}`);
+      set((state) => ({
+        users: state.users.filter((user) => user._id !== id),
+      }));
+      return { success: true };
+    } catch (error) {
+      console.log(error);
+      return { success: false, error: error.message };
+    }
+  },
 }));
 
 export default useUsersStore;

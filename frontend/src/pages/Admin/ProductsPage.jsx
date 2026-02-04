@@ -10,12 +10,24 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import useAssetsStore from "../../store/useAssetsStore";
+import { toast } from "react-hot-toast";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const { assets } = useAssetsStore();
+  const { assets, deleteAsset } = useAssetsStore();
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      const { success, error } = await deleteAsset(id);
+      if (success) {
+        toast.success("Product deleted successfully");
+      } else {
+        toast.error(error || "Failed to delete product");
+      }
+    }
+  };
 
   const filteredProducts = assets?.filter((product) => {
     const matchesSearch = product.title
@@ -180,7 +192,10 @@ const ProductsPage = () => {
                       <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                         <Edit size={18} />
                       </button>
-                      <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                      <button
+                        onClick={() => handleDelete(product._id)}
+                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      >
                         <Trash2 size={18} />
                       </button>
                     </div>

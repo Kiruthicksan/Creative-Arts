@@ -33,6 +33,21 @@ const useAssetsStore = create((set) => ({
       set({ loading: false });
     }
   },
+
+  deleteAsset: async (id) => {
+    try {
+      set({ loading: true });
+      await API.delete(`/assets/${id}`);
+      set((state) => ({
+        assets: state.assets.filter((asset) => asset._id !== id),
+        loading: false,
+      }));
+      return { success: true };
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      return { success: false, error: error.message };
+    }
+  },
 }));
 
 export default useAssetsStore;
