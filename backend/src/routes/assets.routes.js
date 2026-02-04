@@ -4,6 +4,7 @@ import {
   getAssets,
   getAssetsById,
   updateAsset,
+  deleteAsset,
 } from "../controllers/assets.controller.js";
 import { upload } from "../middlewares/uploadMiddleware.js";
 
@@ -26,4 +27,5 @@ router.put(
   ]),
   updateAsset,
 );
+router.delete("/:id", deleteAsset);
 export default router;

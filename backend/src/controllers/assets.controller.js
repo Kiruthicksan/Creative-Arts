@@ -270,3 +270,34 @@ export const updateAsset = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const deleteAsset = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const asset = await Assets.findById(id);
+
+    if (!asset) {
+      return res.status(404).json({ error: "Asset not found" });
+    }
+
+    // Delete files from Cloudinary
+    if (asset.downloadFile?.public_id) {
+      await cloudinary.uploader.destroy(asset.downloadFile.public_id, {
+        resource_type: "raw",
+      });
+    }
+
+    if (asset.previewImages?.length > 0) {
+      await Promise.all(
+        asset.previewImages.map((img) =>
+          cloudinary.uploader.destroy(img.public_id),
+        ),
+      );
+    }
+
+    await Assets.deleteOne({ _id: id });
+    res.status(200).json({ message: "Asset deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
