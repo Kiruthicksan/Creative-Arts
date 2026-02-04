@@ -19,6 +19,8 @@ export const getUserStats = async (req, res) => {
       ordersLastMonth,
       activeOrders,
       activeOrdersLastMonth,
+      recentUsers,
+      dailyStats,
     ] = await Promise.all([
       User.countDocuments(),
       User.countDocuments({ createdAt: { $lte: lastMonth } }),
@@ -37,6 +39,28 @@ export const getUserStats = async (req, res) => {
         status: "pending",
         createdAt: { $lte: lastMonth },
       }),
+      User.find()
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .select("userName email role createdAt"),
+      Order.aggregate([
+        {
+          $match: {
+            status: "paid",
+            createdAt: {
+              $gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+            revenue: { $sum: "$totalAmount" },
+            orders: { $sum: 1 },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]),
     ]);
 
     const totalRevenue = totalRevenueResult[0]?.total || 0;
@@ -74,6 +98,8 @@ export const getUserStats = async (req, res) => {
         totalOrdersGrowth: Math.round(totalOrdersGrowth * 10) / 10,
         activeOrders,
         activeOrdersGrowth: Math.round(activeOrdersGrowth * 10) / 10,
+        recentUsers,
+        dailyStats,
       },
     });
   } catch (error) {
