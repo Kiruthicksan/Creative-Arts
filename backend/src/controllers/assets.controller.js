@@ -40,6 +40,11 @@ export const createAsset = async (req, res) => {
       rating,
     } = req.body;
 
+    const parsedPrice = parseFloat(price);
+    const parsedOriginalPrice = originalPrice ? parseFloat(originalPrice) : 0;
+    const parsedDiscount = discount ? parseFloat(discount) : 0;
+    const parsedRating = rating ? parseFloat(rating) : 0;
+
     /* -------------------- BASIC VALIDATION -------------------- */
     if (!title || !description || !category || !price || !author) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -116,11 +121,11 @@ export const createAsset = async (req, res) => {
       category,
       previewImages: imageData,
       downloadFile: downloadFileData,
-      price,
-      originalPrice,
-      discount,
+      price: parsedPrice,
+      originalPrice: parsedOriginalPrice,
+      discount: parsedDiscount,
       author,
-      rating,
+      rating: parsedRating,
     });
 
     return res.status(201).json(asset);
@@ -140,6 +145,7 @@ export const createAsset = async (req, res) => {
       }
     } catch {}
 
+    console.log("Error in createAsset:", error);
     return res.status(500).json({ error: error.message });
   }
 };
