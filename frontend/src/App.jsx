@@ -36,6 +36,7 @@ import useAssetsStore from "./store/useAssetsStore";
 import { ScrollRestoration } from "react-router-dom";
 import Library from "./pages/Customer/Library";
 import Users from "./pages/Admin/Users";
+import AddProductPage from "./pages/Admin/AddProductPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -90,6 +91,7 @@ const router = createBrowserRouter(
         <Route element={<AdminLayout />}>
           <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route path="admin-products" element={<ProductsPage />} />
+          <Route path="admin-products/add" element={<AddProductPage />} />
           <Route path="admin-users" element={<Users />} />
         </Route>
       </Route>

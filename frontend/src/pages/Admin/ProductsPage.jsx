@@ -11,6 +11,7 @@ import {
 import { motion } from "framer-motion";
 import useAssetsStore from "../../store/useAssetsStore";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,10 +64,13 @@ const ProductsPage = () => {
             Manage your store catalog and inventory.
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+        <Link
+          to="/admin-products/add"
+          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200"
+        >
           <Plus size={18} />
           Add Product
-        </button>
+        </Link>
       </div>
 
       {/* Filters & Search */}

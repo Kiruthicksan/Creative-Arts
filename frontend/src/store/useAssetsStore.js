@@ -48,6 +48,28 @@ const useAssetsStore = create((set) => ({
       return { success: false, error: error.message };
     }
   },
+
+  createProduct: async (productData) => {
+    try {
+      set({ loading: true });
+      const response = await API.post("/assets", productData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      set((state) => ({
+        assets: [...state.assets, response.data],
+        loading: false,
+      }));
+      return { success: true };
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      return {
+        success: false,
+        error: error.message || "Failed to create product",
+      };
+    }
+  },
 }));
 
 export default useAssetsStore;
