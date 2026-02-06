@@ -1,21 +1,24 @@
 import ProductCard from "../../Guest/ProductCard";
 import useAssetsStore from "../../../store/useAssetsStore";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const TrendingNow = () => {
   const { assets, loading } = useAssetsStore();
   const trendingProducts = assets.slice(0, 4);
+  const navigate = useNavigate();
 
   return (
     <div className="mb-20">
       <div className="flex items-end justify-between mb-8 px-1">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Trending Now</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Explore Products</h2>
           <p className="text-gray-500 mt-1">
             Customers are loving these right now
           </p>
         </div>
-        <button className="text-purple-600 font-semibold text-sm hover:text-purple-700 hover:underline">
-          View Best Sellers →
+        <button className="text-purple-600 font-semibold text-sm hover:text-purple-700 hover:underline flex items-center gap-2 cursor-pointer" onClick={() => navigate("/browse")}>
+          View All <ArrowRight className="w-4 h-4" />
         </button>
       </div>
 

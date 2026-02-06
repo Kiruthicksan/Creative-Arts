@@ -50,20 +50,6 @@ const useCartStore = create((set, get) => ({
       set({ loading: false });
     }
   },
-  updateQuantity: async (assetId, quantity) => {
-    try {
-      set({ loading: true });
-      const response = await API.put("/cart/update-quantity", {
-        assetId,
-        quantity,
-      });
-      set({ cart: response.data.cart });
-      toast.success("Quantity updated in cart");
-    } catch (error) {
-      console.log(error);
-      set({ loading: false });
-    }
-  },
   clearCart: () => {
     set({ cart: { items: [], totalItems: 0, totalPrice: 0 } });
   },

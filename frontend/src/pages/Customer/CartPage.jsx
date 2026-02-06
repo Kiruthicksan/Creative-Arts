@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
 const CartPage = () => {
-  const { cart, removeFromCart, updateQuantity } = useCartStore();
+  const { cart, removeFromCart } = useCartStore();
 
   const navigate = useNavigate();
 
@@ -64,7 +64,6 @@ const CartPage = () => {
                   <CartItem
                     key={item._id}
                     item={item}
-                    updateQuantity={updateQuantity}
                     removeFromCart={removeFromCart}
                   />
                 ))}
@@ -147,23 +146,7 @@ const CartPage = () => {
   );
 };
 
-const CartItem = ({ item, updateQuantity, removeFromCart }) => {
-  const [quantity, setQuantity] = React.useState(item.quantity);
-
-  React.useEffect(() => {
-    setQuantity(item.quantity);
-  }, [item.quantity]);
-
-  React.useEffect(() => {
-    if (quantity === item.quantity) return;
-
-    const timeoutId = setTimeout(() => {
-      updateQuantity(item.asset._id, quantity);
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-  }, [quantity, item.asset._id]); // Intentionally omitting item.quantity and updateQuantity to prevent loops
-
+const CartItem = ({ item, removeFromCart }) => {
   return (
     <div key={item._id} className="p-6 flex gap-6 group">
       {/* Product Image */}
@@ -187,29 +170,6 @@ const CartItem = ({ item, updateQuantity, removeFromCart }) => {
           <p className="text-xs text-gray-400 mt-1">
             Digital download - Instant access
           </p>
-
-          {/* Quantity Selector */}
-          <div className="mt-4 flex items-center gap-3">
-            <span className="text-sm text-gray-500 font-medium">Qty:</span>
-            <div className="flex items-center border border-gray-200 rounded-lg bg-gray-50">
-              <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                disabled={quantity <= 1}
-                className="p-1.5 hover:bg-white hover:shadow-sm rounded-md transition-all text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Minus className="w-3.5 h-3.5" />
-              </button>
-              <span className="w-8 text-center text-sm font-semibold text-gray-900">
-                {quantity}
-              </span>
-              <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="p-1.5 hover:bg-white hover:shadow-sm rounded-md transition-all text-gray-600"
-              >
-                <Plus className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Actions & Price */}

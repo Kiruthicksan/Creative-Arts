@@ -27,6 +27,9 @@ const AddProductPage = () => {
     discount: "",
     author: "",
     included: "",
+    tags: "",
+    trending: false,
+    featured: false,
   });
 
   const [previewImages, setPreviewImages] = useState([]);
@@ -42,8 +45,11 @@ const AddProductPage = () => {
   ];
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleImageChange = (e) => {
@@ -257,6 +263,54 @@ const AddProductPage = () => {
                 className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all resize-none"
                 placeholder="List what's included (e.g. 5 PSD files, 1 PDF guide)..."
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Tags (comma separated)
+              </label>
+              <input
+                type="text"
+                name="tags"
+                value={formData.tags}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                placeholder="design, 3d, abstract, modern"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="trending"
+                id="trending"
+                checked={formData.trending}
+                onChange={handleInputChange}
+                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <label
+                htmlFor="trending"
+                className="text-sm font-medium text-gray-700 select-none cursor-pointer"
+              >
+                Mark as Trending Product
+              </label>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="featured"
+                id="featured"
+                checked={formData.featured}
+                onChange={handleInputChange}
+                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              <label
+                htmlFor="featured"
+                className="text-sm font-medium text-gray-700 select-none cursor-pointer"
+              >
+                Mark as Featured Product
+              </label>
             </div>
           </div>
         </div>

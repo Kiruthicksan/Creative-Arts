@@ -106,12 +106,12 @@ const ConfirmationPage = () => {
                           {item.asset.title}
                         </span>
                         <span className="text-xs text-gray-500">
-                          Qty: {item.quantity}
+                          Digital Download
                         </span>
                       </div>
                     </div>
                     <span className="text-sm font-semibold text-gray-900">
-                      ₹{item.asset.price * item.quantity}
+                      ₹{item.asset.price}
                     </span>
                   </div>
                 ))}
@@ -125,7 +125,11 @@ const ConfirmationPage = () => {
               <div className="flex justify-between items-center pt-4 border-t border-gray-200">
                 <span className="font-bold text-gray-900">Total Paid</span>
                 <span className="text-xl font-bold text-purple-600">
-                  ₹{cart.totalPrice}
+                  ₹
+                  {cart.items.reduce(
+                    (sum, item) => sum + (item.asset?.price || 0),
+                    0,
+                  )}
                 </span>
               </div>
             </div>
