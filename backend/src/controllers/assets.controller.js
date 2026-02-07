@@ -38,12 +38,30 @@ export const createAsset = async (req, res) => {
       discount,
       author,
       rating,
+      trending,
+      featured,
+      tags,
     } = req.body;
 
     const parsedPrice = parseFloat(price);
     const parsedOriginalPrice = originalPrice ? parseFloat(originalPrice) : 0;
     const parsedDiscount = discount ? parseFloat(discount) : 0;
     const parsedRating = rating ? parseFloat(rating) : 0;
+    const parsedTrending = trending === "true" || trending === true;
+    const parsedFeatured = featured === "true" || featured === true;
+
+    let parsedTags = [];
+    if (tags) {
+      if (Array.isArray(tags)) {
+        parsedTags = tags;
+      } else if (typeof tags === "string") {
+        // Handle comma separated tags "tag1, tag2"
+        parsedTags = tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag.length > 0);
+      }
+    }
 
     /* -------------------- BASIC VALIDATION -------------------- */
     if (!title || !description || !category || !price || !author) {
@@ -126,6 +144,9 @@ export const createAsset = async (req, res) => {
       discount: parsedDiscount,
       author,
       rating: parsedRating,
+      trending: parsedTrending,
+      featured: parsedFeatured,
+      tags: parsedTags,
     });
 
     return res.status(201).json(asset);
@@ -174,6 +195,8 @@ export const updateAsset = async (req, res) => {
       "author",
       "rating",
       "featured",
+      "trending",
+      "tags",
     ];
 
     allowedFields.forEach((field) => {
@@ -183,15 +206,37 @@ export const updateAsset = async (req, res) => {
     });
 
     /* ---------- UPDATE PREVIEW IMAGES ---------- */
-    if (req.files?.previewImages?.length) {
-      if (asset.previewImages && asset.previewImages.length > 0) {
-        await Promise.all(
-          asset.previewImages.map((img) =>
-            cloudinary.uploader.destroy(img.public_id),
-          ),
-        );
-      }
+    let currentImages = asset.previewImages || [];
 
+    // 1. Handle deletion/keeping of existing images
+    if (req.body.existingImageIds) {
+      try {
+        const keptIds = JSON.parse(req.body.existingImageIds);
+
+        // Find images to delete (those in DB but NOT in the kept list)
+        const imagesToDelete = currentImages.filter(
+          (img) => !keptIds.includes(img.public_id),
+        );
+
+        // Keep only the ones in the list
+        currentImages = currentImages.filter((img) =>
+          keptIds.includes(img.public_id),
+        );
+
+        if (imagesToDelete.length > 0) {
+          await Promise.all(
+            imagesToDelete.map((img) =>
+              cloudinary.uploader.destroy(img.public_id),
+            ),
+          );
+        }
+      } catch (e) {
+        console.error("Error parsing existingImageIds:", e);
+      }
+    }
+
+    // 2. Add new images
+    if (req.files?.previewImages?.length) {
       const newImages = await Promise.all(
         req.files.previewImages.map(
           (file) =>
@@ -214,8 +259,10 @@ export const updateAsset = async (req, res) => {
         ),
       );
 
-      asset.previewImages = newImages;
+      currentImages = [...currentImages, ...newImages];
     }
+
+    asset.previewImages = currentImages;
 
     /* ---------- UPDATE DOWNLOAD ZIP ---------- */
     if (req.files?.downloadFile?.length) {

@@ -4,6 +4,7 @@ import Cart from "../models/cart.schema.js";
 import config from "../utils/secret.js";
 import crypto from "crypto";
 import { Assets } from "../models/assets.schema.js";
+import User from "../models/userSchema.js";
 
 // Create Razorpay Order
 export const createOrder = async (req, res) => {
@@ -157,6 +158,30 @@ export const getPurchasedItems = async (req, res) => {
     res.status(200).json({ success: true, items: libraryItems });
   } catch (error) {
     console.error("Error fetching library:", error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+// Get All Orders (Admin)
+export const getAllOrders = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only." });
+    }
+
+    const orders = await Order.find()
+      .populate("user", "userName email")
+      .populate("items.asset")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    console.error("Error fetching all orders:", error);
     res
       .status(500)
       .json({ message: "Internal Server Error", error: error.message });

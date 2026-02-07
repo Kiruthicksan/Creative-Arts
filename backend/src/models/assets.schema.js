@@ -78,6 +78,14 @@ const AssetsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    trending: {
+      type: Boolean,
+      default: false,
+    },
+    tags: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true },
 );

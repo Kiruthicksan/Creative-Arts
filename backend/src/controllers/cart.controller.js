@@ -40,20 +40,20 @@ export const addToCart = async (req, res) => {
     );
 
     if (itemIndex > -1) {
-      cart.items[itemIndex].quantity += quantity;
+      return res.status(400).json({ message: "Item already in cart" });
     } else {
       cart.items.push({
         asset: assetId,
-        quantity,
+        quantity: 1,
         priceAtAdd: asset.price,
       });
     }
 
     // ---------- RECALCULATE TOTALS ----------
-    cart.totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+    cart.totalItems = cart.items.length;
 
     cart.totalPrice = cart.items.reduce(
-      (sum, item) => sum + item.quantity * item.priceAtAdd,
+      (sum, item) => sum + item.priceAtAdd,
       0,
     );
 
@@ -97,6 +97,13 @@ export const getCart = async (req, res) => {
       });
     }
 
+    // Recalculate totals just in case
+    cart.totalItems = cart.items.length;
+    cart.totalPrice = cart.items.reduce((sum, item) => {
+      const price = item.asset?.price || 0;
+      return sum + price;
+    }, 0);
+
     return res.status(200).json({ cart });
   } catch (error) {
     console.error("Get cart error:", error);
@@ -122,13 +129,10 @@ export const removeCart = async (req, res) => {
       return res.status(404).json({ message: "Cart not found" });
     }
 
-    updatedCart.totalItems = updatedCart.items.reduce(
-      (sum, item) => sum + item.quantity,
-      0,
-    );
+    updatedCart.totalItems = updatedCart.items.length;
     updatedCart.totalPrice = updatedCart.items.reduce((sum, item) => {
       const price = item.asset?.price || 0;
-      return sum + item.quantity * price;
+      return sum + price;
     }, 0);
 
     await updatedCart.save();
@@ -139,48 +143,6 @@ export const removeCart = async (req, res) => {
     });
   } catch (error) {
     console.error("Remove cart error:", error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-export const updateQuantity = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const { assetId, quantity } = req.body;
-
-    const updatedCart = await Cart.findOneAndUpdate(
-      { user: userId },
-      { $set: { "items.$[item].quantity": quantity } },
-      {
-        new: true,
-        arrayFilters: [{ "item.asset": new Types.ObjectId(assetId) }],
-      },
-    ).populate({
-      path: "items.asset",
-      select: "title previewImages price discount author",
-    });
-
-    if (!updatedCart) {
-      return res.status(404).json({ message: "Cart not found" });
-    }
-
-    updatedCart.totalItems = updatedCart.items.reduce(
-      (sum, item) => sum + item.quantity,
-      0,
-    );
-    updatedCart.totalPrice = updatedCart.items.reduce((sum, item) => {
-      const price = item.asset?.price || 0;
-      return sum + item.quantity * price;
-    }, 0);
-
-    await updatedCart.save();
-
-    return res.status(200).json({
-      message: "Quantity updated in cart",
-      cart: updatedCart,
-    });
-  } catch (error) {
-    console.error("Update quantity error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
