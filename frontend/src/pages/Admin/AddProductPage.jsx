@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useRef, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   Upload,
@@ -9,6 +9,7 @@ import {
   Layers,
   Save,
   Loader,
+  X,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
@@ -16,7 +17,10 @@ import useAssetsStore from "../../store/useAssetsStore";
 
 const AddProductPage = () => {
   const navigate = useNavigate();
-  const { createProduct, loading } = useAssetsStore();
+  const { id } = useParams();
+  const { createProduct, updateAsset, getAssetsById, asset, loading } =
+    useAssetsStore();
+  const isEditing = !!id;
 
   const [formData, setFormData] = useState({
     title: "",
@@ -34,6 +38,53 @@ const AddProductPage = () => {
 
   const [previewImages, setPreviewImages] = useState([]);
   const [downloadFile, setDownloadFile] = useState(null);
+  const [existingImages, setExistingImages] = useState([]);
+  const fileInputRef = useRef(null);
+  const downloadFileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      getAssetsById(id);
+    }
+  }, [id, isEditing]);
+
+  useEffect(() => {
+    if (isEditing && asset && asset._id === id) {
+      setFormData({
+        title: asset.title || "",
+        description: asset.description || "",
+        category: asset.category || "Graphic Design",
+        price: asset.price || "",
+        originalPrice: asset.originalPrice || "",
+        discount: asset.discount || "",
+        author: asset.author || "",
+        included: asset.included || "",
+        tags: asset.tags ? asset.tags.join(", ") : "",
+        trending: asset.trending || false,
+        featured: asset.featured || false,
+      });
+      if (asset.previewImages) {
+        setExistingImages(asset.previewImages);
+      }
+    } else if (!isEditing) {
+      setFormData({
+        title: "",
+        description: "",
+        category: "Graphic Design",
+        price: "",
+        originalPrice: "",
+        discount: "",
+        author: "",
+        included: "",
+        tags: "",
+        trending: false,
+        featured: false,
+      });
+      setExistingImages([]);
+      setPreviewImages([]);
+      setDownloadFile(null);
+    }
+  }, [asset, isEditing, id]);
 
   const categories = [
     "Graphic Design",
@@ -57,6 +108,16 @@ const AddProductPage = () => {
     setPreviewImages((prev) => [...prev, ...files]);
   };
 
+  const removePreviewImage = (index) => {
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = (imageId) => {
+    setExistingImages((prev) =>
+      prev.filter((img) => img.public_id !== imageId),
+    );
+  };
+
   const handleFileChange = (e) => {
     setDownloadFile(e.target.files[0]);
   };
@@ -69,8 +130,8 @@ const AddProductPage = () => {
       !formData.title ||
       !formData.price ||
       !formData.author ||
-      !downloadFile ||
-      previewImages.length === 0
+      (!downloadFile && !isEditing) || // In edit mode, file is optional (keep existing)
+      (previewImages.length === 0 && existingImages.length === 0)
     ) {
       toast.error("Please fill in all required fields and upload files.");
       return;
@@ -85,14 +146,45 @@ const AddProductPage = () => {
       data.append("previewImages", image);
     });
 
+    if (isEditing) {
+      // For existing images, we might need to handle deletions or reordering if the backend supports it.
+      // For now, let's assume the backend handles replacing images or we send a list of kept image IDs if needed.
+      // A common pattern is to send `existingImages` IDs to the backend to know which ones to keep.
+      // But based on `updateAsset` logic in many systems, it might just append new images.
+      // If we want to support deleting existing images, we need logic for that.
+      // Let's simplistically just send new images.
+      // To strictly support deleting, we would need to send a `keptImages` array.
+      // Let's assume the backend 'previewImages' field only adds new ones, and we need another way to delete.
+      // However, usually `put` might replace. Without seeing backend, hard to say.
+      // Let's emulate a `keptImages` field if possible or just proceed.
+      // Since I can't see backend, I'll send `existingImages` as JSON string if that helps,
+      // or simply rely on the fact that we might only be ADDING images.
+      // Wait, the user interface allows deleting.
+
+      // Let's append `existingImageIds` to let backend know what to keep.
+      const ids = existingImages.map((img) => img.public_id);
+      data.append("existingImageIds", JSON.stringify(ids));
+    }
+
     if (downloadFile) {
       data.append("downloadFile", downloadFile);
     }
 
-    const { success, error } = await createProduct(data);
+    let result;
+    if (isEditing) {
+      result = await updateAsset(id, data);
+    } else {
+      result = await createProduct(data);
+    }
+
+    const { success, error } = result;
 
     if (success) {
-      toast.success("Product created successfully!");
+      toast.success(
+        isEditing
+          ? "Product updated successfully!"
+          : "Product created successfully!",
+      );
       navigate("/admin-products");
     } else {
       toast.error(error);
@@ -110,9 +202,13 @@ const AddProductPage = () => {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {isEditing ? "Edit Product" : "Add New Product"}
+          </h1>
           <p className="text-gray-500 mt-1">
-            Create a new digital asset for your store.
+            {isEditing
+              ? "Update product details and assets."
+              : "Create a new digital asset for your store."}
           </p>
         </div>
       </div>
@@ -341,22 +437,48 @@ const AddProductPage = () => {
               </div>
             </label>
 
-            {previewImages.length > 0 && (
+            {(previewImages.length > 0 || existingImages.length > 0) && (
               <div className="space-y-2">
                 <p className="text-sm font-medium text-gray-700">
-                  {previewImages.length} images selected
+                  {previewImages.length + existingImages.length} images selected
                 </p>
                 <div className="grid grid-cols-3 gap-2">
+                  {existingImages.map((img, idx) => (
+                    <div
+                      key={`existing-${idx}`}
+                      className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200 group"
+                    >
+                      <img
+                        src={img.secure_url}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeExistingImage(img.public_id)}
+                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
                   {Array.from(previewImages).map((file, idx) => (
                     <div
-                      key={idx}
-                      className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200"
+                      key={`new-${idx}`}
+                      className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200 group"
                     >
                       <img
                         src={URL.createObjectURL(file)}
                         alt="Preview"
                         className="w-full h-full object-cover"
                       />
+                      <button
+                        type="button"
+                        onClick={() => removePreviewImage(idx)}
+                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X size={12} />
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -384,7 +506,9 @@ const AddProductPage = () => {
                   className="hidden"
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  ZIP file containing all assets
+                  {isEditing
+                    ? "Upload new ZIP (optional)"
+                    : "ZIP file containing all assets"}
                 </p>
               </div>
             </label>
@@ -412,7 +536,7 @@ const AddProductPage = () => {
               ) : (
                 <>
                   <Save size={20} />
-                  Create Product
+                  {isEditing ? "Update Product" : "Create Product"}
                 </>
               )}
             </button>

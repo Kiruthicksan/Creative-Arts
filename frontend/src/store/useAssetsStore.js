@@ -70,6 +70,30 @@ const useAssetsStore = create((set) => ({
       };
     }
   },
+
+  updateAsset: async (id, productData) => {
+    try {
+      set({ loading: true });
+      const response = await API.put(`/assets/${id}`, productData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      set((state) => ({
+        assets: state.assets.map((asset) =>
+          asset._id === id ? response.data : asset,
+        ),
+        loading: false,
+      }));
+      return { success: true };
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      return {
+        success: false,
+        error: error.message || "Failed to update product",
+      };
+    }
+  },
 }));
 
 export default useAssetsStore;

@@ -3,9 +3,7 @@ import {
   LayoutDashboard,
   Users,
   ShoppingBag,
-  Settings,
   LogOut,
-  Menu,
   X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,7 +16,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
     { icon: LayoutDashboard, label: "Dashboard", path: "/admin-dashboard" },
     { icon: Users, label: "Users", path: "/admin-users" },
     { icon: ShoppingBag, label: "Products", path: "/admin-products" },
-    // { icon: Settings, label: "Settings", path: "/admin-settings" }, // Maybe added in future
+    { icon: ShoppingBag, label: "Orders", path: "/admin-orders" }, 
   ];
 
   const {logout} = useAuthStore()

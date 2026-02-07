@@ -193,9 +193,12 @@ const ProductsPage = () => {
                       <button className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                         <Eye size={18} />
                       </button>
-                      <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                      <Link
+                        to={`/admin-products/edit/${product._id}`}
+                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      >
                         <Edit size={18} />
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleDelete(product._id)}
                         className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"

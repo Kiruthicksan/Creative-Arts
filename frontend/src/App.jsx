@@ -37,6 +37,7 @@ import { ScrollRestoration } from "react-router-dom";
 import Library from "./pages/Customer/Library";
 import Users from "./pages/Admin/Users";
 import AddProductPage from "./pages/Admin/AddProductPage";
+import OrdersPage from "./pages/Admin/OrdersPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -92,7 +93,9 @@ const router = createBrowserRouter(
           <Route path="admin-dashboard" element={<AdminDashboard />} />
           <Route path="admin-products" element={<ProductsPage />} />
           <Route path="admin-products/add" element={<AddProductPage />} />
+          <Route path="admin-products/edit/:id" element={<AddProductPage />} />
           <Route path="admin-users" element={<Users />} />
+          <Route path="admin-orders" element={<OrdersPage />} />
         </Route>
       </Route>
     </Route>,
