@@ -4,7 +4,9 @@ import useAssetsStore from "../../../store/useAssetsStore";
 
 const FeaturedProducts = () => {
   const { assets } = useAssetsStore();
-  const featuredProducts = assets.filter((product) => product.featured);
+  const featuredProducts = assets
+    .filter((product) => product.featured)
+    .slice(0, 4);
   return (
     <div className="mb-20 py-20">
       <div className="max-w-6xl mx-auto px-4">

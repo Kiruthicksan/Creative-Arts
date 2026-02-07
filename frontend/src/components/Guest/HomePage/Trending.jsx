@@ -4,9 +4,10 @@ import useAssetsStore from "../../../store/useAssetsStore";
 
 const Trending = () => {
   const { assets } = useAssetsStore();
-  const trendingData = [...assets].reverse();
 
-  const trendingProducts = trendingData.slice(0, 4);
+  const trendingProducts = assets
+    .filter((asset) => asset.trending)
+    .slice(0, 4);
 
   return (
     <div className="max-w-6xl mx-auto mb-20 px-4">
