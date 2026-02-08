@@ -80,7 +80,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (user) {
       if (user.role === "customer") {
-        navigate("/customer-dashboard");
+        navigate("/home");
       } else if (user.role === "admin") {
         navigate("/admin-dashboard");
       } else {

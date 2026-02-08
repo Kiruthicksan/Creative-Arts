@@ -78,7 +78,7 @@ const router = createBrowserRouter(
       {/* Customer Routes */}
       <Route element={<ProtectedRoute allowedRoles={["customer"]} />}>
         <Route element={<CustomerLayout />}>
-          <Route path="customer-dashboard" element={<CustomerDashboard />} />
+          <Route path="home" element={<CustomerDashboard />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="payment" element={<PaymentPage />} />
           <Route path="confirmation-page" element={<ConfirmationPage />} />

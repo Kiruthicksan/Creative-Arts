@@ -21,119 +21,71 @@ const DailySpotlight = () => {
   if (!spotlightProduct) return null;
 
   return (
-    <div className="mb-20">
-      <div className="relative w-full rounded-[2.5rem] overflow-hidden bg-gray-900 border border-white/10 shadow-2xl">
+    <div className="mb-12">
+      <div className="relative w-full rounded-3xl overflow-hidden bg-gray-900 border border-white/10 shadow-xl h-[350px] md:h-[400px]">
         {/* Background Gradient & Effects */}
         <div className="absolute inset-0">
           <img
             src={spotlightProduct.previewImages?.[0]?.secure_url}
             alt="Background"
-            className="w-full h-full object-cover opacity-40 blur-3xl scale-110"
+            className="w-full h-full object-cover opacity-50 blur-xl scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/90 via-gray-900/80 to-purple-900/40" />
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/40 to-transparent" />
         </div>
 
-        <div className="relative z-10 flex flex-col md:flex-row items-center gap-10 p-8 md:p-14">
+        <div className="relative z-10 flex items-center h-full px-8 md:px-12">
           {/* Content (Left) */}
-          <div className="flex-1 space-y-8">
+          <div className="max-w-2xl space-y-5">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-amber-300 text-sm font-bold shadow-lg shadow-amber-900/20"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 backdrop-blur-md border border-purple-500/30 text-purple-200 text-xs font-bold uppercase tracking-wider"
             >
-              <Sparkles className="w-4 h-4 fill-current" />
-              <span>Daily Editor's Pick</span>
+              <Sparkles className="w-3 h-3 fill-current" />
+              <span>Editor's Pick</span>
             </motion.div>
 
             <div>
               <motion.h2
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight mb-4"
+                transition={{ delay: 0.1 }}
+                className="text-3xl md:text-5xl font-serif font-bold text-white leading-tight mb-3"
               >
                 {spotlightProduct.title}
               </motion.h2>
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-lg text-gray-300 max-w-xl leading-relaxed line-clamp-2"
+                transition={{ delay: 0.2 }}
+                className="text-base text-gray-300 max-w-lg line-clamp-2"
               >
                 {spotlightProduct.description}
               </motion.p>
             </div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="flex items-center gap-6"
+              transition={{ delay: 0.3 }}
+              className="flex items-center gap-4"
             >
               <button
                 onClick={() => navigate(`/product/${spotlightProduct._id}`)}
-                className="group relative px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-bold flex items-center gap-3 overflow-hidden transition-all shadow-lg shadow-purple-500/30 active:scale-95"
+                className="group px-6 py-3 bg-white text-gray-900 hover:bg-gray-100 rounded-xl font-bold flex items-center gap-2 transition-all active:scale-95"
               >
-                <span className="relative z-10">Get This Asset</span>
-                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                <span>View Details</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <div className="flex items-center gap-2 text-white/50 text-sm">
-                <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                <span className="text-white font-semibold">
-                  {spotlightProduct.rating}{" "}
-                </span>
-                <span>/ 5.0 Rating</span>
+              <div className="flex items-center gap-1.5 text-white/80 text-sm font-medium bg-black/20 px-4 py-3 rounded-xl backdrop-blur-sm">
+                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                <span>{spotlightProduct.rating}</span>
+                <span className="text-white/40">|</span>
+                <span>₹{spotlightProduct.price}</span>
               </div>
             </motion.div>
           </div>
-
-          {/* Floating Card (Right) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 100,
-              damping: 20,
-              delay: 0.4,
-            }}
-            className="w-full md:w-[450px] aspect-[4/3] relative hidden md:block"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-3xl blur-2xl transform translate-y-4" />
-            <div
-              className="relative h-full w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-gray-900 group cursor-pointer"
-              onClick={() => navigate(`/product/${spotlightProduct._id}`)}
-            >
-              <img
-                src={spotlightProduct.previewImages?.[0]?.secure_url}
-                alt={spotlightProduct.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              {/* Overlay Content on Card */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="flex justify-between items-end">
-                  <div>
-                    <p className="text-white/70 text-sm font-medium mb-1">
-                      Created by
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500" />
-                      <span className="text-white font-bold">
-                        {spotlightProduct.author}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-2xl font-bold text-white">
-                    ₹{spotlightProduct.price}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </div>
     </div>

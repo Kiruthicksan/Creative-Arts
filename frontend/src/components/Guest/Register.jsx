@@ -41,7 +41,7 @@ const Register = ({ onSwitchToLogin }) => {
         if (role === "admin") {
           navigate("/admin-dashboard");
         } else {
-          navigate("/customer-dashboard");
+          navigate("/home");
         }
       }
     },
@@ -87,7 +87,7 @@ const Register = ({ onSwitchToLogin }) => {
       if (role === "admin") {
         navigate("/admin-dashboard");
       } else {
-        navigate("/customer-dashboard");
+        navigate("/home");
       }
     }
   };

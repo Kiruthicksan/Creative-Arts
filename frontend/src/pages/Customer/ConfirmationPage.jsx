@@ -137,7 +137,7 @@ const ConfirmationPage = () => {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/customer-dashboard"
+                to="/home"
                 className="inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-purple-200 active:scale-95"
               >
                 <Download className="w-5 h-5" />
