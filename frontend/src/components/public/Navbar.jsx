@@ -17,24 +17,28 @@ import Register from "../Guest/Register";
 import Login from "../Guest/Login";
 import useAuthStore from "../../store/useAuthStore";
 import useCartStore from "../../store/useCartStore";
+import NavLinks from "./Navbar/NavLinks";
 
 const Navbar = () => {
   // local state for managing auth modal
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalView, setAuthModalView] = useState("login");
 
-  const [profileOpen, setProfileOpen] = useState(false);
-  const menuRef = useRef(null);
-
-  const navigate = useNavigate();
-
   // local state for managing mobile menu
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { user } = useAuthStore();
+  // local state for managing profile dropdown
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  // ref for profile dropdown
+  const menuRef = useRef(null);
+
+  const navigate = useNavigate(); // for navigation
+
+  const { user } = useAuthStore(); // for user state
 
   // cart state
-  const { cart } = useCartStore();
+  const { cart } = useCartStore(); // for cart state
 
   // function to open auth modal
   const openModal = () => {
@@ -54,6 +58,8 @@ const Navbar = () => {
     };
   }, []);
 
+  // Todo - Add autoclose when clicking on the links
+
   return (
     <>
       <div
@@ -70,32 +76,7 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden lg:flex items-center gap-8">
-              <Link
-                to="/browse"
-                className="text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors"
-              >
-                Browse
-              </Link>
-              <Link
-                to="/sci-fi"
-                className="text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors"
-              >
-                Sci-Fi & Cyber
-              </Link>
-              <Link
-                to="/fantasy"
-                className="text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors"
-              >
-                Fantasy
-              </Link>
-              <Link
-                to="/horror"
-                className="text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors"
-              >
-                Horror
-              </Link>
-            </div>
+            <NavLinks />
           </div>
 
           {/* Right Side: Search, Icons, Actions */}
@@ -141,13 +122,18 @@ const Navbar = () => {
                   </button>
                   {profileOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-2xl border border-gray-100 py-1 z-50">
-                      <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors" onClick={() => navigate("/profile")}>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                        onClick={() => navigate("/profile")}
+                      >
                         Profile
                       </button>
-                      <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors" onClick={() => navigate("/library")}>
+                      <button
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                        onClick={() => navigate("/library")}
+                      >
                         My Library
                       </button>
-                      
                     </div>
                   )}
                 </div>
@@ -284,13 +270,15 @@ const Navbar = () => {
                             Profile
                           </span>
                         </button>
-                        <button className="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-50 text-gray-600 font-medium flex items-center justify-between group transition-colors" onClick={() => navigate("/library")}>
+                        <button
+                          className="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-50 text-gray-600 font-medium flex items-center justify-between group transition-colors"
+                          onClick={() => navigate("/library")}
+                        >
                           <span className="flex items-center gap-3">
                             <LayoutGrid className="w-4 h-4 text-gray-400 group-hover:text-purple-600 transition-colors" />
                             My Library
                           </span>
                         </button>
-                       
                       </div>
                     </div>
                   ) : (
