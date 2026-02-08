@@ -1,23 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Heart,
-  Search,
-  ShoppingCart,
-  Menu,
-  X,
-  User,
-  LogOut,
-  LayoutGrid,
-} from "lucide-react";
+import { Heart, ShoppingCart, Menu } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import ModalContainer from "../Guest/ModalContainer";
-import Register from "../Guest/Register";
-import Login from "../Guest/Login";
-import useAuthStore from "../../store/useAuthStore";
-import useCartStore from "../../store/useCartStore";
-import NavLinks from "./Navbar/NavLinks";
-import MobileMenu from "./Navbar/MobileMenu";
+import ModalContainer from "../../Guest/ModalContainer";
+import Register from "../../Guest/Register";
+import Login from "../../Guest/Login";
+import useAuthStore from "../../../store/useAuthStore";
+import useCartStore from "../../../store/useCartStore";
+import NavLinks from "./NavLinks";
+import MobileMenu from "./MobileMenu";
 
 const Navbar = () => {
   // local state for managing auth modal

@@ -1,7 +1,7 @@
 
 
 import { Outlet } from 'react-router-dom';
-import Navbar from '../components/public/Navbar';
+import Navbar from '../components/public/Navbar/Navbar';
 import Footer from '../components/public/Footer';
 
 const CustomerLayout = () => {
