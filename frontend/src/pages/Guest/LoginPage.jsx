@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useGoogleLogin } from "@react-oauth/google";
 import { Lock, Mail, Eye, EyeOff, Github } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
 import { useNavigate, Link } from "react-router-dom";
@@ -36,8 +37,15 @@ const LoginPage = () => {
   });
 
   // Auth Store
-  const { login, isLoading, error, user } = useAuthStore();
+  const { login, googleLogin, isLoading, error, user } = useAuthStore();
   const navigate = useNavigate();
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      await googleLogin(tokenResponse.access_token);
+    },
+    onError: () => console.log("Google Login Failed"),
+  });
 
   // Ref to focus the email input
   const inputRef = useRef(null);
@@ -177,6 +185,7 @@ const LoginPage = () => {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
+              onClick={() => handleGoogleLogin()}
               className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-gray-200 transition-all text-xs font-medium text-gray-700"
             >
               <GoogleIcon />

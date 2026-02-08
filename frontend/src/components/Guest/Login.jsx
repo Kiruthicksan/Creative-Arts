@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useGoogleLogin } from "@react-oauth/google";
 import { Lock, Mail, Eye, EyeOff, Github } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
@@ -36,8 +37,23 @@ const Login = ({ onSwitchToRegister }) => {
   });
 
   // ----------------------- auth store --------------------------------
-  const { login, isLoading, error } = useAuthStore();
+  const { login, googleLogin, isLoading, error } = useAuthStore();
   const navigate = useNavigate();
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      const response = await googleLogin(tokenResponse.access_token);
+      if (response) {
+        const role = response.data.user.role;
+        if (role === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/customer-dashboard");
+        }
+      }
+    },
+    onError: () => console.log("Google Login Failed"),
+  });
 
   // ----------------------- Ref to focus the email input --------------------------------
   const inputRef = useRef(null);
@@ -167,20 +183,14 @@ const Login = ({ onSwitchToRegister }) => {
         </div>
 
         {/* Social Buttons */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3">
           <button
             type="button"
+            onClick={() => handleGoogleLogin()}
             className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-gray-200 transition-all text-xs font-medium text-gray-700"
           >
             <GoogleIcon />
             <span>Google</span>
-          </button>
-          <button
-            type="button"
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-gray-200 transition-all text-xs font-medium text-gray-700"
-          >
-            <Github className="w-4 h-4 text-gray-900" />
-            <span>GitHub</span>
           </button>
         </div>
 
