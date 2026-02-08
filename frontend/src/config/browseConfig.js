@@ -1,11 +1,10 @@
 export const categories = [
   "All",
-  "Illustrations",
-  "Posters",
-  "Graphic Design",
-  "Short Novels",
-  "ConceptArt",
-  "Other",
+  "Cozy",
+  "Sci-fi",
+  "Fantasy",
+  "Horror",
+ 
 ];
 
 export const sortOptions = [

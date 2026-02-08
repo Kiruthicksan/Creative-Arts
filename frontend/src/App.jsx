@@ -39,6 +39,7 @@ import Users from "./pages/Admin/Users";
 import AddProductPage from "./pages/Admin/AddProductPage";
 import OrdersPage from "./pages/Admin/OrdersPage";
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
@@ -59,20 +60,15 @@ const router = createBrowserRouter(
         <Route path="product/:id" element={<ProductDetailsPage />} />
         <Route path="browse" element={<BrowsePage />} />
         <Route
-          path="graphics"
-          element={<BrowsePage category="Graphic Design" />}
+          path="sci-fi"
+          element={<BrowsePage category="Sci-fi" />}
         />
         <Route
-          path="illustrations"
-          element={<BrowsePage category="Illustrations" />}
+          path="fantasy"
+          element={<BrowsePage category="Fantasy" />}
         />
-        <Route path="ebooks" element={<BrowsePage category="Short Novels" />} />
-        <Route path="posters" element={<BrowsePage category="Posters" />} />
-        <Route
-          path="concept-art"
-          element={<BrowsePage category="ConceptArt" />}
-        />
-        <Route path="others" element={<BrowsePage category="Other" />} />
+        <Route path="horror" element={<BrowsePage category="Horror" />} />
+      
       </Route>
 
       {/* Customer Routes */}

@@ -6,15 +6,15 @@ const BrowseHeaderCategoryTab = ({
   setSelectedCategory,
 }) => {
   return (
-    <div className="flex items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-hide">
+    <div className="flex items-center gap-3 mt-8 overflow-x-auto pb-4 scrollbar-hide mask-linear-gradient">
       {categories.map((cat) => (
         <button
           key={cat}
           onClick={() => setSelectedCategory(cat)}
-          className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors border ${
+          className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-300 shadow-sm ${
             selectedCategory === cat
-              ? "bg-gray-900 text-white border-gray-900"
-              : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+              ? "bg-gray-900 text-white shadow-lg shadow-gray-900/20 transform scale-105"
+              : "bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow"
           }`}
         >
           {cat}

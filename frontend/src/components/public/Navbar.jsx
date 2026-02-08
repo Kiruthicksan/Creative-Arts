@@ -78,22 +78,22 @@ const Navbar = () => {
                 Browse
               </Link>
               <Link
-                to="/graphics"
+                to="/sci-fi"
                 className="text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors"
               >
-                Graphics
+                Sci-Fi & Cyber
               </Link>
               <Link
-                to="/illustrations"
+                to="/fantasy"
                 className="text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors"
               >
-                Illustrations
+                Fantasy
               </Link>
               <Link
-                to="/ebooks"
+                to="/horror"
                 className="text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors"
               >
-                eBooks
+                Horror
               </Link>
             </div>
           </div>

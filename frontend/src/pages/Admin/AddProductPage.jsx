@@ -25,7 +25,7 @@ const AddProductPage = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: "Graphic Design",
+    category: "Cozy",
     price: "",
     originalPrice: "",
     discount: "",
@@ -53,7 +53,7 @@ const AddProductPage = () => {
       setFormData({
         title: asset.title || "",
         description: asset.description || "",
-        category: asset.category || "Graphic Design",
+        category: asset.category || "Cozy",
         price: asset.price || "",
         originalPrice: asset.originalPrice || "",
         discount: asset.discount || "",
@@ -70,7 +70,7 @@ const AddProductPage = () => {
       setFormData({
         title: "",
         description: "",
-        category: "Graphic Design",
+        category: "Cozy",
         price: "",
         originalPrice: "",
         discount: "",
@@ -86,14 +86,7 @@ const AddProductPage = () => {
     }
   }, [asset, isEditing, id]);
 
-  const categories = [
-    "Graphic Design",
-    "Illustrations",
-    "Short Novels",
-    "Posters",
-    "ConceptArt",
-    "Other",
-  ];
+  const categories = ["Cozy", "Sci-fi", "Fantasy", "Horror", "Other"];
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -130,7 +123,7 @@ const AddProductPage = () => {
       !formData.title ||
       !formData.price ||
       !formData.author ||
-      (!downloadFile && !isEditing) || // In edit mode, file is optional (keep existing)
+      // (!downloadFile && !isEditing) || // In edit mode, file is optional (keep existing)
       (previewImages.length === 0 && existingImages.length === 0)
     ) {
       toast.error("Please fill in all required fields and upload files.");

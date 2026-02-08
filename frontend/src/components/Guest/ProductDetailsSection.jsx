@@ -18,10 +18,10 @@ const ProductDetailsSection = ({ product }) => {
   return (
     <div className="flex flex-col gap-8 font-sans">
       {/* Back Button */}
-     <BackButton />
-      <div className="flex flex-col lg:flex-row gap-12">
+      <BackButton />
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
         {/* Left Column - Images */}
-       <ProductGallery product={product} />
+        <ProductGallery product={product} />
 
         {/* Right Column - Product Details */}
         <ProductHearder product={product} />

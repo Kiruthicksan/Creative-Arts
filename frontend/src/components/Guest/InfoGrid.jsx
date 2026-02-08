@@ -6,22 +6,22 @@ const InfoGrid = ({ product }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       <InfoCard
-        icon={<FileText size={20} className="text-purple-500" />}
+        icon={<FileText size={20} className="text-purple-600" />}
         label="Format"
         value="ZIP (Figma, React)"
       />
       <InfoCard
-        icon={<Database size={20} className="text-purple-500" />}
+        icon={<Database size={20} className="text-purple-600" />}
         label="Size"
         value="245 MB"
       />
       <InfoCard
-        icon={<Download size={20} className="text-purple-500" />}
+        icon={<Download size={20} className="text-purple-600" />}
         label="Downloads"
         value={product.downloads.toLocaleString()}
       />
       <InfoCard
-        icon={<ShieldCheck size={20} className="text-purple-500" />}
+        icon={<ShieldCheck size={20} className="text-purple-600" />}
         label="License"
         value="Commercial"
       />
