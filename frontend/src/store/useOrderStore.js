@@ -15,6 +15,17 @@ const useOrderStore = create((set) => ({
       set({ error: error.message, loading: false });
     }
   },
+
+  getRecentPurchases: async () => {
+    try {
+      set({ loading: true });
+      const response = await API.get("/orders/library");
+      // The library endpoint returns flattened items from paid orders
+      set({ orders: response.data.items || [], loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
 }));
 
 export default useOrderStore;

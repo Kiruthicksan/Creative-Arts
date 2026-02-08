@@ -75,9 +75,13 @@ const PaymentPage = () => {
             });
 
             if (verifyRes.data.success) {
-              clearCart(); // Clear local cart state
+              const orderDetails = {
+                items: cart.items,
+                totalPrice: cart.totalPrice,
+              };
+              clearCart();
               toast.success("Payment Successful!");
-              navigate("/confirmation-page");
+              navigate("/confirmation-page", { state: orderDetails });
             } else {
               toast.error("Payment verification failed.");
             }

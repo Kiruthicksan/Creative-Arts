@@ -3,6 +3,7 @@ import Header from "../../components/Customer/CustomerDashboard/Header";
 import DailySpotlight from "../../components/Customer/CustomerDashboard/DailySpotlight";
 import FeaturedProducts from "../../components/Guest/HomePage/FeaturedProducts";
 import TrendingNow from "../../components/Customer/CustomerDashboard/TrendingNow";
+import JumpBackIn from "../../components/Customer/CustomerDashboard/JumpBackIn";
 
 const CustomerDashboard = () => {
   return (
@@ -12,6 +13,9 @@ const CustomerDashboard = () => {
 
         {/* Hero Spotlight */}
         <DailySpotlight />
+
+        {/* Recent Purchases */}
+        <JumpBackIn />
 
         {/* Catalog Grid */}
         <TrendingNow />

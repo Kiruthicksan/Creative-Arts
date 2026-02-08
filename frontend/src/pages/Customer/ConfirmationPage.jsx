@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Check, ArrowRight, Download, Home, FileText } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useCartStore from "../../store/useCartStore";
 import confetti from "canvas-confetti";
 
 const ConfirmationPage = () => {
   const { cart } = useCartStore();
+  const location = useLocation();
+  const orderData = location.state || cart; // Fallback to cart if no state passed
+  const displayItems = orderData.items || [];
+  const displayTotal = orderData.totalPrice || 0;
 
   useEffect(() => {
     // Fire confetti on mount
@@ -88,7 +92,7 @@ const ConfirmationPage = () => {
               </div>
 
               <div className="space-y-4 mb-4">
-                {cart.items.slice(0, 3).map((item) => (
+                {displayItems.slice(0, 3).map((item) => (
                   <div
                     key={item._id}
                     className="flex justify-between items-center"
@@ -115,9 +119,9 @@ const ConfirmationPage = () => {
                     </span>
                   </div>
                 ))}
-                {cart.items.length > 3 && (
+                {displayItems.length > 3 && (
                   <p className="text-xs text-center text-gray-500 italic pt-2">
-                    + {cart.items.length - 3} more items
+                    + {displayItems.length - 3} more items
                   </p>
                 )}
               </div>
@@ -125,11 +129,7 @@ const ConfirmationPage = () => {
               <div className="flex justify-between items-center pt-4 border-t border-gray-200">
                 <span className="font-bold text-gray-900">Total Paid</span>
                 <span className="text-xl font-bold text-purple-600">
-                  ₹
-                  {cart.items.reduce(
-                    (sum, item) => sum + (item.asset?.price || 0),
-                    0,
-                  )}
+                  ₹ {displayTotal}
                 </span>
               </div>
             </div>
