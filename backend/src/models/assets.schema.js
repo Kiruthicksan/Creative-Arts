@@ -15,14 +15,7 @@ const AssetsSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      enum: [
-        "Illustrations",
-        "Posters",
-        "Graphic Design",
-        "Short Novels",
-        "ConceptArt",
-        "Other",
-      ],
+      enum: ["Cozy", "Sci-fi", "Fantasy", "Horror", "Other"],
     },
     included: {
       type: String,
