@@ -100,15 +100,15 @@ const Navbar = () => {
 
           {/* Right Side: Search, Icons, Actions */}
           <div className="flex items-center gap-4 lg:gap-6">
-            {/* Search Bar - Hidden on mobile */}
-            <div className="hidden lg:flex items-center bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5 w-64 focus-within:ring-2 focus-within:ring-purple-100 focus-within:border-purple-300 transition-all">
+            {/* Search Bar - Hidden on mobile (will be added later or changed or removed) */}
+            {/* <div className="hidden lg:flex items-center bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5 w-64 focus-within:ring-2 focus-within:ring-purple-100 focus-within:border-purple-300 transition-all">
               <Search className="w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search assets..."
                 className="bg-transparent border-none outline-none text-sm ml-2 w-full text-gray-700 placeholder-gray-400"
-              />
-            </div>
+              /> 
+            </div> */}
 
             {/* Icons */}
             <div className="flex items-center gap-4">
