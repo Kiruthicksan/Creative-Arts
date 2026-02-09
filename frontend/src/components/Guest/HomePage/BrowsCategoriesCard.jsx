@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-const BrowsCategoriesCard = ({ name, count, color, iconColor, image, path }) => {
+const BrowsCategoriesCard = ({ name, count, color, iconColor, icon, path }) => {
   const navigate = useNavigate();
   return (
     <motion.div
@@ -14,11 +14,7 @@ const BrowsCategoriesCard = ({ name, count, color, iconColor, image, path }) => 
         className="w-14 h-14 rounded-xl flex items-center justify-center mb-2 shadow-sm"
         style={{ backgroundColor: iconColor }}
       >
-        <img
-          src={image}
-          alt={name}
-          className="w-8 h-8 object-contain brightness-0 invert"
-        />
+        {icon}
       </div>
       <div className="relative w-full">
         <h3 className="text-lg font-bold text-gray-900 mb-1">{name}</h3>

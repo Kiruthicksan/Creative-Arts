@@ -1,4 +1,3 @@
-
 import graphicDesign from "../../../assets/GraphicDesign.svg";
 import illustrations from "../../../assets/Illustrations.svg";
 import digitalArt from "../../../assets/Posters.svg";
@@ -7,56 +6,67 @@ import templates from "../../../assets/Templates.svg";
 import uiKits from "../../../assets/ConceptArt.svg";
 import useAssetsStore from "../../../store/useAssetsStore";
 import BrowsCategoriesCard from "./BrowsCategoriesCard";
+import {
+  LayoutGrid,
+  Coffee,
+  Rocket,
+  Wand2,
+  Ghost,
+  MoreHorizontal,
+} from "lucide-react";
 
 const BrowseCategories = () => {
   const { assets } = useAssetsStore();
   const categories = [
     {
-      name: "Graphic Design",
-      count: assets.filter((asset) => asset.category === "Graphic Design").length + 1240,
+      name: "All",
+      count: assets.length + 1240,
       color: "#F3E8FF", // Light Purple
       iconColor: "#A855F7", // Purple
-      image: graphicDesign,
+      icon: <LayoutGrid size={24} />,
       path: "/graphics",
     },
     {
-      name: "Concept Art",
-      count: assets.filter((asset) => asset.category === "Concept Art").length + 856,
+      name: "Cozy",
+      count: assets.filter((asset) => asset.category === "Cozy").length + 856,
       color: "#FCE7F3", // Light Pink
       iconColor: "#EC4899", // Pink
-      image: uiKits,
-      path: "/concept-art",
+      icon: <Coffee size={24} />,
+      path: "/cozy",
     },
     {
-      name: "Illustrations",
-      count: assets.filter((asset) => asset.category === "Illustrations").length + 2100,
+      name: "Sci-fi",
+      count:
+        assets.filter((asset) => asset.category === "Sci-fi").length + 2100,
       color: "#EFF6FF", // Light Blue
       iconColor: "#3B82F6", // Blue
-      image: illustrations,
-      path: "/illustrations",
+      icon: <Rocket size={24} />,
+      path: "/sci-fi",
     },
     {
-      name: "Posters",
-      count: assets.filter((asset) => asset.category === "Posters").length + 1890,
+      name: "Fantasy",
+      count:
+        assets.filter((asset) => asset.category === "Fantasy").length + 1890,
       color: "#FFF7ED", // Light Orange
       iconColor: "#F97316", // Orange
-      image: digitalArt,
-      path: "/posters",
+      icon: <Wand2 size={24} />,
+      path: "/fantasy",
     },
     {
-      name: "Short Novels",
-      count: assets.filter((asset) => asset.category === "Short Novels").length + 720,
+      name: "Horror",
+      count: assets.filter((asset) => asset.category === "Horror").length + 720,
       color: "#ECFDF5", // Light Green
       iconColor: "#10B981", // Green
-      image: ebooks,
-      path: "/ebooks",
+      icon: <Ghost size={24} />,
+      path: "/horror",
     },
     {
       name: "Others",
-      count: assets.filter((asset) => asset.category === "Others").length + 1450,
+      count:
+        assets.filter((asset) => asset.category === "Others").length + 1450,
       color: "#EEF2FF", // Light Indigo
       iconColor: "#6366F1", // Indigo
-      image: templates,
+      icon: <MoreHorizontal size={24} />,
       path: "/others",
     },
   ];
@@ -76,7 +86,7 @@ const BrowseCategories = () => {
             count={category.count}
             color={category.color}
             iconColor={category.iconColor}
-            image={category.image}
+            icon={category.icon}
             path={category.path}
           />
         ))}
