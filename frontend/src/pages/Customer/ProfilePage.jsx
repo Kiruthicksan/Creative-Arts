@@ -1,17 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import {
-  User,
-  Calendar,
-  Package,
-  ArrowRight,
-  Sparkles,
-  Clock,
-} from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
 import ProfileHeader from "../../components/Customer/ProfilePage/ProfileHeader";
 import ProfileLeftSidebar from "../../components/Customer/ProfilePage/ProfileLeftSidebar";
+import ProfileRightColumn from "../../components/Customer/ProfilePage/ProfileRightColumn";
+import useOrderStore from "../../store/useOrderStore";
+import { useEffect } from "react";
 
 // Helper to format dates
 const formatDate = (dateString) => {
@@ -24,6 +16,11 @@ const formatDate = (dateString) => {
 
 const ProfilePage = () => {
   const { user, logout } = useAuthStore();
+  const { recentPurchases, getRecentPurchases } = useOrderStore();
+
+  useEffect(() => {
+    getRecentPurchases();
+  }, []);
 
   // Loading state handling could be improved, but relying on auth guard for now
   if (!user) {
@@ -60,49 +57,10 @@ const ProfilePage = () => {
           <ProfileLeftSidebar user={user} formatDate={formatDate} />
 
           {/* Right Column: Recent Activity */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-8"
-          >
-            <div className="bg-white/70 backdrop-blur-xl rounded-3xl border border-white shadow-xl shadow-purple-900/5 min-h-[500px] flex flex-col">
-              <div className="p-8 border-b border-gray-100/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h3 className="text-2xl font-bold font-serif text-gray-900 flex items-center gap-3">
-                  <span className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
-                    <Clock size={24} />
-                  </span>
-                  Recent Orders
-                </h3>
-                <button className="text-sm font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-5 py-2.5 rounded-xl transition-all">
-                  View Full History
-                </button>
-              </div>
-
-              <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-                <div className="w-24 h-24 rounded-3xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-6 relative group">
-                  <div className="absolute inset-0 bg-purple-100 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <Package
-                    size={40}
-                    className="text-gray-300 relative z-10 group-hover:text-purple-500 transition-colors duration-300"
-                  />
-                </div>
-                <h4 className="text-xl font-bold text-gray-900 mb-3">
-                  No orders yet
-                </h4>
-                <p className="text-gray-500 max-w-sm mx-auto mb-8 leading-relaxed">
-                  Start your creative journey! Purchase a digital asset to see
-                  your order history here.
-                </p>
-                <Link
-                  to="/"
-                  className="px-8 py-4 bg-gray-900 hover:bg-black text-white rounded-2xl font-bold transition-all shadow-xl shadow-gray-900/10 hover:-translate-y-1 hover:shadow-gray-900/20 flex items-center gap-2"
-                >
-                  Explore Collections
-                </Link>
-              </div>
-            </div>
-          </motion.div>
+          <ProfileRightColumn
+            recentPurchases={recentPurchases}
+            formatDate={formatDate}
+          />
         </div>
       </div>
     </div>

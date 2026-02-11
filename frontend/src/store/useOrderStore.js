@@ -3,6 +3,7 @@ import API from "../services/api";
 
 const useOrderStore = create((set) => ({
   orders: [],
+  recentPurchases: [],
   loading: false,
   error: null,
 
@@ -21,7 +22,7 @@ const useOrderStore = create((set) => ({
       set({ loading: true });
       const response = await API.get("/orders/library");
       // The library endpoint returns flattened items from paid orders
-      set({ orders: response.data.items || [], loading: false });
+      set({ recentPurchases: response.data.items || [], loading: false });
     } catch (error) {
       set({ error: error.message, loading: false });
     }

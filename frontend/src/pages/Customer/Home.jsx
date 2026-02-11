@@ -17,7 +17,7 @@ import useAuthStore from "../../store/useAuthStore";
 import useCartStore from "../../store/useCartStore";
 import toast from "react-hot-toast";
 
-const CustomerDashboard = () => {
+const Home = () => {
   const { user } = useAuthStore();
   const { assets, getAssets } = useAssetsStore();
   const { addToCart } = useCartStore();
@@ -330,4 +330,4 @@ const CustomerDashboard = () => {
   );
 };
 
-export default CustomerDashboard;
+export default Home;
