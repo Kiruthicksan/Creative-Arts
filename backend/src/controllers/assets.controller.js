@@ -4,7 +4,13 @@ import slugify from "slugify";
 
 export const getAssets = async (req, res) => {
   try {
-    const assets = await Assets.find();
+    const { category } = req.query;
+    const filter = {};
+    if (category) {
+      filter.category = category;
+    }
+
+    const assets = await Assets.find(filter);
     res.status(200).json(assets);
   } catch (error) {
     res.status(500).json({ error: error.message });

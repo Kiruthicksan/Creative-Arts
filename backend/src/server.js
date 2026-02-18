@@ -11,6 +11,7 @@ import uploadRoutes from "./routes/upload.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import wishlistRoutes from "./routes/wishlist.routes.js";
 const app = express();
 
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 
 const server = async () => {
   try {
