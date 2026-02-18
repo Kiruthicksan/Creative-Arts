@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
+import useAssetsStore from "../../store/useAssetsStore"; // Import useAssetsStore
 import Trending from "../../components/Guest/HomePage/Trending";
 import WhyChooseUs from "../../components/Guest/WhyChooseUs";
 import HeroSection from "../../components/Guest/HomePage/HeroSection";
@@ -9,7 +10,12 @@ import FeaturedProducts from "../../components/Guest/HomePage/FeaturedProducts";
 
 const HomePage = () => {
   const { user, isAuthenticated, isLoading } = useAuthStore();
+  const { getAssets } = useAssetsStore(); // Destructure getAssets
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getAssets(); // Fetch all assets when HomePage mounts
+  }, [getAssets]);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && user) {

@@ -1,6 +1,7 @@
 import { Star, Download, ShoppingCart, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import useWishlistStore from "../../store/useWishlistStore"; // Import store
 import useCartStore from "../../store/useCartStore";
 
 const ProductCard = ({
@@ -19,12 +20,23 @@ const ProductCard = ({
 }) => {
   const navigate = useNavigate();
 
-  const isInCart = useCartStore((state) => state.isInCart(id));
-  const { addToCart, loading } = useCartStore();
-  const handleClick = () => {
-    if (isInCart) return;
+  const { isInCart, addToCart } = useCartStore(); // Fix destructing
+  const cartLoading = useCartStore((state) => state.loading);
+
+  const { toggleWishlist, isInWishlist } = useWishlistStore(); // Destructure wishlist store
+  const isWishlisted = isInWishlist(id); // Check status
+
+  const handleCartClick = (e) => {
+    e.stopPropagation(); // Stop navigation
+    if (isInCart(id)) return;
     addToCart(id);
   };
+
+  const handleWishlistClick = (e) => {
+    e.stopPropagation(); // Stop navigation
+    toggleWishlist(id);
+  };
+
   return (
     <motion.div
       whileHover={{ scale: 1.01, y: -5 }}
@@ -57,8 +69,17 @@ const ProductCard = ({
           </div>
 
           {/* Right: Wishlist Button */}
-          <button className="bg-white/80 backdrop-blur-md hover:bg-white p-1.5 rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors pointer-events-auto group/heart">
-            <Heart className="w-4 h-4 group-hover/heart:fill-red-500 transition-colors" />
+          <button
+            className="bg-white/80 backdrop-blur-md hover:bg-white p-1.5 rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors pointer-events-auto group/heart z-10"
+            onClick={handleWishlistClick}
+          >
+            <Heart
+              className={`w-4 h-4 transition-colors ${
+                isWishlisted
+                  ? "fill-red-500 text-red-500"
+                  : "group-hover/heart:fill-red-500"
+              }`}
+            />
           </button>
         </div>
       </div>
@@ -120,13 +141,13 @@ const ProductCard = ({
             </div>
           </div>
           <motion.button
-            disabled={loading || isInCart}
+            disabled={cartLoading || isInCart(id)}
             whileTap={{ scale: 0.95 }}
-            className={`bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-lg shadow-purple-200 transition-colors ${isInCart ? "opacity-50 cursor-not-allowed" : ""}`}
-            onClick={handleClick}
+            className={`bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-lg shadow-purple-200 transition-colors ${isInCart(id) ? "opacity-50 cursor-not-allowed" : ""}`}
+            onClick={handleCartClick}
           >
             <ShoppingCart className="w-3.5 h-3.5" />
-            {isInCart ? "In Cart" : "Add to Cart"}
+            {isInCart(id) ? "In Cart" : "Add to Cart"}
           </motion.button>
         </div>
       </div>

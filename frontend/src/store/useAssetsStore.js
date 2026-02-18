@@ -7,10 +7,11 @@ const useAssetsStore = create((set) => ({
   loading: false,
   error: null,
 
-  getAssets: async () => {
+  getAssets: async (category) => {
     try {
       set({ loading: true });
-      const response = await API.get("/assets");
+      const query = category ? `?category=${category}` : "";
+      const response = await API.get(`/assets${query}`);
       set({ assets: response.data });
     } catch (error) {
       set({ error: error.message });

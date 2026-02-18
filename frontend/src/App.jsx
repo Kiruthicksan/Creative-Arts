@@ -25,6 +25,8 @@ import ConfirmationPage from "./pages/Customer/ConfirmationPage";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ProductsPage from "./pages/Admin/ProductsPage";
 import ProfilePage from "./pages/Customer/ProfilePage";
+import NotFoundPage from "./pages/Guest/NotFoundPage";
+import AboutUsPage from "./pages/Guest/AboutUsPage";
 
 // Stores
 import useAuthStore from "./store/useAuthStore";
@@ -38,7 +40,7 @@ import Users from "./pages/Admin/Users";
 import AddProductPage from "./pages/Admin/AddProductPage";
 import OrdersPage from "./pages/Admin/OrdersPage";
 import Home from "./pages/Customer/Home";
-
+import WishlistPage from "./pages/Customer/WishlistPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -59,16 +61,10 @@ const router = createBrowserRouter(
         <Route index element={<HomePage />} />
         <Route path="product/:id" element={<ProductDetailsPage />} />
         <Route path="browse" element={<BrowsePage />} />
-        <Route
-          path="sci-fi"
-          element={<BrowsePage category="Sci-fi" />}
-        />
-        <Route
-          path="fantasy"
-          element={<BrowsePage category="Fantasy" />}
-        />
+        <Route path="sci-fi" element={<BrowsePage category="Sci-fi" />} />
+        <Route path="fantasy" element={<BrowsePage category="Fantasy" />} />
         <Route path="horror" element={<BrowsePage category="Horror" />} />
-      
+        <Route path="about" element={<AboutUsPage />} />
       </Route>
 
       {/* Customer Routes */}
@@ -80,6 +76,7 @@ const router = createBrowserRouter(
           <Route path="confirmation-page" element={<ConfirmationPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="library" element={<Library />} />
+          <Route path="wishlist" element={<WishlistPage />} />
         </Route>
       </Route>
 
@@ -94,6 +91,9 @@ const router = createBrowserRouter(
           <Route path="admin-orders" element={<OrdersPage />} />
         </Route>
       </Route>
+
+      {/* 404 Catch-all */}
+      <Route path="*" element={<NotFoundPage />} />
     </Route>,
   ),
 );

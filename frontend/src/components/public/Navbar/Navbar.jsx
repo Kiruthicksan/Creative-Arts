@@ -9,6 +9,8 @@ import useCartStore from "../../../store/useCartStore";
 import NavLinks from "./NavLinks";
 import MobileMenu from "./MobileMenu";
 
+import useWishlistStore from "../../../store/useWishlistStore";
+
 const Navbar = () => {
   // local state for managing auth modal
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -29,6 +31,15 @@ const Navbar = () => {
 
   // cart state
   const { cart } = useCartStore(); // for cart state
+
+  // wishlist state
+  const { wishlist, fetchWishlist } = useWishlistStore();
+
+  useEffect(() => {
+    if (user) {
+      fetchWishlist();
+    }
+  }, [user, fetchWishlist]);
 
   // function to open auth modal
   const openModal = () => {
@@ -75,9 +86,17 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               {user && (
                 <>
-                  <button className="text-gray-600 hover:text-purple-600 transition-colors relative group">
+                  <Link
+                    to="/wishlist"
+                    className="text-gray-600 hover:text-purple-600 transition-colors relative group"
+                  >
                     <Heart className="w-5 h-5" />
-                  </button>
+                    {wishlist.length > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
+                        {wishlist.length}
+                      </span>
+                    )}
+                  </Link>
                   <button className="text-gray-600 hover:text-purple-600 transition-colors relative">
                     <Link to="/cart">
                       <ShoppingCart className="w-5 h-5" />

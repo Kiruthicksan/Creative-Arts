@@ -35,7 +35,16 @@ const BrowsePage = ({ category }) => {
   }, [category]);
 
   // Store.
-  const { assets } = useAssetsStore();
+  const { assets, getAssets, loading } = useAssetsStore();
+
+  // Fetch assets when category changes
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      getAssets();
+    } else {
+      getAssets(selectedCategory);
+    }
+  }, [selectedCategory, getAssets]);
 
   // Used custom hook to seprate logic to filter products.
   const { sortedProducts, displayedProducts } = useBrowseProducts({
@@ -116,7 +125,11 @@ const BrowsePage = ({ category }) => {
             </div>
 
             {/* Grid */}
-            {displayedProducts.length > 0 ? (
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+              </div>
+            ) : displayedProducts.length > 0 ? (
               <ProductGrid products={displayedProducts} />
             ) : (
               <EmptyState handleClear={clearAll} />
