@@ -17,6 +17,7 @@ import Register from "../Guest/Register";
 import Login from "../Guest/Login";
 import useAuthStore from "../../store/useAuthStore";
 import useCartStore from "../../store/useCartStore";
+import useWishlistStore from "../../store/useWishlistStore";
 
 const Navbar = () => {
   // local state for managing auth modal
@@ -35,6 +36,9 @@ const Navbar = () => {
 
   // cart state
   const { cart } = useCartStore();
+
+  // wishlist state
+  const { wishlist } = useWishlistStore();
 
   // function to open auth modal
   const openModal = () => {
@@ -116,6 +120,11 @@ const Navbar = () => {
                 <>
                   <button className="text-gray-600 hover:text-purple-600 transition-colors relative group">
                     <Heart className="w-5 h-5" />
+                    {wishlist?.length > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
+                        {wishlist.length}
+                      </span>
+                    )}
                   </button>
                   <button className="text-gray-600 hover:text-purple-600 transition-colors relative">
                     <Link to="/cart">

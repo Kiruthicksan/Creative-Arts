@@ -2,6 +2,7 @@ import { Star, Download, ShoppingCart, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import useCartStore from "../../store/useCartStore";
+import useWishlistStore from "../../store/useWishlistStore";
 
 const ProductCard = ({
   id,
@@ -21,9 +22,19 @@ const ProductCard = ({
 
   const isInCart = useCartStore((state) => state.isInCart(id));
   const { addToCart, loading } = useCartStore();
-  const handleClick = () => {
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
+  
+  const currentInWishlist = isInWishlist(id);
+
+  const handleClick = (e) => {
+    e.stopPropagation();
     if (isInCart) return;
     addToCart(id);
+  };
+
+  const handleWishlistClick = (e) => {
+    e.stopPropagation();
+    toggleWishlist(id);
   };
   return (
     <motion.div
@@ -57,8 +68,19 @@ const ProductCard = ({
           </div>
 
           {/* Right: Wishlist Button */}
-          <button className="bg-white/80 backdrop-blur-md hover:bg-white p-1.5 rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors pointer-events-auto group/heart">
-            <Heart className="w-4 h-4 group-hover/heart:fill-red-500 transition-colors" />
+          <button 
+            onClick={handleWishlistClick}
+            className={`p-1.5 rounded-full shadow-sm transition-colors pointer-events-auto group/heart ${
+              currentInWishlist
+                ? "bg-red-50 text-red-500 hover:bg-red-100"
+                : "bg-white/80 backdrop-blur-md hover:bg-white text-gray-600 hover:text-red-500"
+            }`}
+          >
+            <Heart 
+              className={`w-4 h-4 transition-colors ${
+                currentInWishlist ? "fill-red-500 text-red-500" : "group-hover/heart:fill-red-500"
+              }`} 
+            />
           </button>
         </div>
       </div>

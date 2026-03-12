@@ -14,6 +14,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import useAuthStore from "../../store/useAuthStore";
+import useWishlistStore from "../../store/useWishlistStore";
 
 // Helper to format dates
 const formatDate = (dateString) => {
@@ -26,6 +27,7 @@ const formatDate = (dateString) => {
 
 const ProfilePage = () => {
   const { user, logout } = useAuthStore();
+  const { wishlist } = useWishlistStore();
 
   // Loading state handling could be improved, but relying on auth guard for now
   if (!user) {
@@ -193,7 +195,7 @@ const ProfilePage = () => {
                 },
                 {
                   label: "Wishlist",
-                  value: user.wishlistCount || "0",
+                  value: wishlist?.length || "0",
                   icon: Heart,
                   color: "text-rose-600",
                   bg: "bg-rose-50 border-rose-100",

@@ -31,6 +31,7 @@ import ProfilePage from "./pages/Customer/ProfilePage";
 import useAuthStore from "./store/useAuthStore";
 import useCartStore from "./store/useCartStore";
 import useAssetsStore from "./store/useAssetsStore";
+import useWishlistStore from "./store/useWishlistStore";
 
 // The ScrollRestoration component only works inside a Data Router
 import { ScrollRestoration } from "react-router-dom";
@@ -102,11 +103,13 @@ const App = () => {
   const { profile } = useAuthStore();
   const { getAssets } = useAssetsStore();
   const { getCart } = useCartStore();
+  const { getWishlist } = useWishlistStore();
 
   useEffect(() => {
     profile();
     getAssets();
     getCart();
+    getWishlist();
   }, []);
 
   return (

@@ -1,13 +1,22 @@
 import { motion } from "framer-motion";
 import { ShoppingCart, Heart, Share2, CheckCircle } from "lucide-react";
 import useCartStore from "../../store/useCartStore";
+import useWishlistStore from "../../store/useWishlistStore";
 
 const PurchasePanel = ({ product }) => {
   const { addToCart, loading } = useCartStore();
   const isInCart = useCartStore((state) => state.isInCart(product._id));
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
+  
+  const currentInWishlist = isInWishlist(product._id);
+
   const handleClick = () => {
     if (isInCart) return;
     addToCart(product._id);
+  };
+
+  const handleWishlistClick = () => {
+    toggleWishlist(product._id);
   };
   return (
     <div className="flex flex-col gap-6">
@@ -24,9 +33,18 @@ const PurchasePanel = ({ product }) => {
 
         <motion.button
           whileTap={{ scale: 0.95 }}
-          className="p-3.5 rounded-xl border border-gray-200 hover:border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+          onClick={handleWishlistClick}
+          className={`p-3.5 rounded-xl border transition-colors group ${
+            currentInWishlist
+              ? "border-red-200 bg-red-50 text-red-500 hover:bg-red-100"
+              : "border-gray-200 hover:border-gray-300 text-gray-700 hover:bg-gray-50"
+          }`}
         >
-          <Heart className="w-5 h-5" />
+          <Heart
+            className={`w-5 h-5 transition-colors ${
+              currentInWishlist ? "fill-red-500 text-red-500" : "group-hover:text-red-500"
+            }`}
+          />
         </motion.button>
 
         <motion.button
