@@ -19,7 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL 
+      ? [process.env.FRONTEND_URL, "http://localhost:5173"] 
+      : "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -35,15 +37,16 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 
-const server = async () => {
-  try {
-    await connectDB();
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 
-server();
+connectDB();
+
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+export default app;
